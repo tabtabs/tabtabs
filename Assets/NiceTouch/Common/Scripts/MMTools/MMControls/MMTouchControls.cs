@@ -10,12 +10,12 @@ namespace MoreMountains.Tools
 	public class MMTouchControls : MonoBehaviour 
 	{
 		public enum InputForcedMode { None, Mobile, Desktop }
+		[Information("If you check Auto Mobile Detection, the engine will automatically switch to mobile controls when your build target is Android or iOS. You can also force mobile or desktop (keyboard, gamepad) controls using the dropdown below.\nNote that if you don't need mobile controls and/or GUI this component can also work on its own, just put it on an empty GameObject instead.",InformationAttribute.InformationType.Info,false)]
 		/// If you check Auto Mobile Detection, the engine will automatically switch to mobile controls when your build target is Android or iOS. 
 		/// You can also force mobile or desktop (keyboard, gamepad) controls using the dropdown below.Note that if you don't need mobile controls 
 		/// and/or GUI this component can also work on its own, just put it on an empty GameObject instead.
-		[Information("If you check Auto Mobile Detection, the engine will automatically switch to mobile controls when your build target is Android or iOS. You can also force mobile or desktop (keyboard, gamepad) controls using the dropdown below.\nNote that if you don't need mobile controls and/or GUI this component can also work on its own, just put it on an empty GameObject instead.",InformationAttribute.InformationType.Info,false)]
 		public bool AutoMobileDetection = true;
-		/// 데스크톱 모드(게임패드, 키보드...) 또는 모바일(터치 컨트롤) 모드 강제 적용 
+		/// Force desktop mode (gamepad, keyboard...) or mobile (touch controls) 
 		public InputForcedMode ForcedMode;
 		public bool IsMobile { get; protected set; }
 

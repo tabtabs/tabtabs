@@ -8,6 +8,7 @@ namespace MoreMountains.Tools
 {	
 
 	[CustomPropertyDrawer(typeof(HiddenAttribute))]
+
 	public class HiddenAttributeDrawer : PropertyDrawer
 	{
 	    public override float GetPropertyHeight(SerializedProperty property, GUIContent label)

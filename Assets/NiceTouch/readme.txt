@@ -6,35 +6,23 @@ Nice Touch v1.4
 ## WHAT'S IN THE ASSET ?
 -------------------------
 
-자산에는 Common 및 Demos라는 두 개의 기본 폴더가 있습니다. 
-이름에서 알 수 있듯이 Common에는 모바일 컨트롤이 작동하는 데 필요한 모든 스크립트와 시각적 자산이 포함되어 있습니다.
-게임에 해당 폴더를 유지하고 싶을 것입니다. 
-모든 스크립트는 Scripts/MMTools 폴더에 그룹화됩니다.
-Nice Touch의 핵심 스크립트는 Corgi Engine과 Infinite Runner Engine에서 사용되는 더 큰 라이브러리인 MMTools의 일부이기 때문입니다.
+The asset contains two main folders : Common and Demos. As the name implies, Common contains all the scripts and visual assets necessary for the mobile controls to work. You'll want to keep that folder in your game. All the scrips are grouped in a Scripts/MMTools folder. That's because the scripts at the core of Nice Touch are part of MMTools, a bigger library used (among other places) in the Corgi Engine and in the Infinite Runner Engine.
 
-데모에는 두 개의 데모 장면이 포함되어 있습니다.
-NiceTouchTestScene은 철저한 디버그 장면입니다.
-가능한 모든 이벤트(조이스틱을 한 방향으로 밀거나 버튼을 눌렀다 떼는 등)에 대해 콘솔 또는 화면 로그를 트리거합니다.
-정 이벤트를 바인딩하는 방법이 궁금할 때 유용할 수 있습니다.
-CubeCylinderSphere(I'm good at names)는 Nice Touch 컨트롤을 사용하여 세 가지 다른 "캐릭터"를 제어하는 매우 미니멀한 게임입니다.
-기본적이지만 이러한 컨트롤을 게임에 통합할 수 있는 방법에 대한 좋은 예입니다. 데모 폴더는 컨트롤이 작동하는 데 필요하지 않으므로 안전하게 제거할 수 있습니다.
+Demos contains two demo scenes. NiceTouchTestScene is an exhaustive debug scene. It'll trigger console or on screen logs for every possible event (joystick pushed in a direction, button pressed, released, etc...). It can be useful if you're wondering how to bind a certain event. CubeCylinderSphere (I'm good at names) is a very, very minimal game, where you control three different "characters" using the Nice Touch controls. It's a basic but good example of how you can integrate these controls into your game. The demo folders are not required for the controls to work, you can remove them safely.
 
 
-## 이것을 내 게임에 어떻게 추가합니까?
+## HOW DO I ADD THIS TO MY GAME ?
 ------------------------------
 
-완전히 새로운 게임을 시작하거나 지금 장면에 GUI가 없는 경우 가장 빠른 방법은 UICamera 프리팹(Common/Resources/에 있음)을 장면으로 끌어다 놓는 것입니다.
-이미 GUI가 있는 경우 가장 빠른 방법이기도 하지만 해당 프리팹을 장면으로 드래그하고 펼친 다음 MMControls 부분을 가져와 기존 캔버스에 넣는 것이 좋습니다.
+If you're starting a brand new game, or if you don't have a GUI in your scene right now, the fastest way is to just drag and drop the UICamera prefab (located in Common/Resources/) into your scene. If you already have a GUI, that's also the fastest way, but you'll want to drag that prefab into the scene, unfold it and just take its MMControls part, and put it into your existing canvas.
 
-그런 다음 (잠재적으로) 컨트롤을 원하는 대로 재배치할 수 있습니다. Unity의 uGUI 모범 사례를 사용하여 구축되었습니다. 익숙하지 않은 경우 Unity 웹사이트에 수많은 정보가 있습니다. 기본적으로 다른 물체처럼 물건을 움직일 수 있습니다. 또한 일부 컨트롤을 제거하고 싶을 수도 있습니다(두 개의 조이스틱과 D-패드가 필요한 사람은 누구입니까?).
+Then, you'll (potentially) want to reposition the controls to your liking. They're built using Unity's uGUI best practices, if you're not familiar with it, there's tons of info over at Unity's website. Basically you can just move stuff around like you would any other object. You'll also probably want to remove some controls (who needs two joysticks and a D-pad ?).
 
-이제 남은 작업은 이러한 컨트롤을 게임에 바인딩하는 것입니다.
-Nice Touch는 게임 클래스의 대상 기능, 메서드를 제어합니다.
-일반적으로 모든 기존(키보드 또는 게임패드) 입력을 처리하는 InputManager 클래스를 대상으로 하거나 캐릭터를 직접 대상으로 지정할 수 있습니다.
-첫 번째 방법은 Corgi Engine 통합을 위해 선택되었으며 CubeCylinderSphere 데모 장면에 두 번째 방법의 예가 있습니다.
-어쨌든 주요 아이디어는 동일합니다. 컨트롤을 메서드에 연결해야 합니다. 상호 작용할 때 이(또는 이러한) 메서드를 트리거합니다.
+Now, all that's left to do is bind these controls to your game.
+The Nice Touch controls target functions, methods from your game's classes. Usually, you'll want to target either an InputManager class, that handles all your existing (keyboard or gamepad) input, or maybe target your characters directly. The first method was chosen for the Corgi Engine integration, and there's an example of the second one in the CubeCylinderSphere demo scene.
+In any case, the main idea is the same. Your controls have to be linked to a method. When they're interacted with, they'll trigger this (or these) method(s).
 
-즉, 게임 측에 깨끗한 메서드가 필요합니다. 예를 들어, 다음은 내 테스트 CharacterMovement 클래스의 메서드입니다. 매우 기본적이지만 다음과 같은 아이디어를 얻을 수 있습니다.
+This means you'll need clean methods on your game's side. For example, here are the methods on my test CharacterMovement class. They're extremely basic, but you'll get the idea :
 
 public virtual void Move(Vector2 newMovement)
 {
@@ -64,22 +52,19 @@ These "dynamic" methods will always be at the very top when you open your charac
 For all the controls, from the inspector, you can change the pressed opacity, this is the opacity that will be applied when the control is interacted with
 
 
-## 플랫폼 감지는 어떻게 작동합니까?
+## HOW DOES PLATFORM DETECTION WORK ?
 -------------------------------------
 
-Hierarchy 패널을 보면 모든 컨트롤이 MMTouchControls 게임 개체 아래에 중첩되어 있음을 알 수 있습니다.
-이 게임 개체는 기본적으로 MMTouchControls 구성 요소가 있는 CanvasGroup입니다. (사용하려는 경우) 모바일 감지를 처리하는 것은 이 구성 요소입니다.
-매우 간단한 방식으로 작동합니다. 모바일 플랫폼(iOS 또는 Android)을 대상으로 하는 경우 재생을 누르면 컨트롤이 표시됩니다.
-다른 플랫폼을 대상으로 하는 경우 해당 플랫폼이 숨겨집니다. 인스펙터에서 한 모드 또는 다른 모드를 강제할 수도 있습니다.
+If you look at the Hierarchy panel, you'll see that all the controls are nested under a MMTouchControls gameobject. This gameobject is basically just a CanvasGroup with a MMTouchControls component. It's this component that handles (if you want to use it) mobile detection. It works in a very simple way : if you're targeting a mobile platform (iOS or Android), it'll show the controls when you press play. If you're targeting another platform, it'll hide them. You can also force one mode or the other from the inspector.
 
-## 어딘가에 문서가 있습니까?
+## IS THERE DOCUMENTATION SOMEWHERE ?
 -------------------------------------
 
-있다!
+There is!
 There's a complete API documentation at http://www.moremountains.com/nice-touch/Docs/index.html
 And a functional documentation at http://reunono.github.io/NiceTouch/
 
-## 여전히 질문이 있습니다!
+## I STILL HAVE A QUESTION!
 ---------------------------
 
 If something's still not clear, you can always drop me a line using the form at http://www.moremountains.com/nice-touch-documentation. It's entirely possible that I forgot to describe something in this page, but please make sure you've read it all before filling this form. You can also please check the FAQ before sending me an email. Chances are, your question's answered right there. If it's not, then go ahead!

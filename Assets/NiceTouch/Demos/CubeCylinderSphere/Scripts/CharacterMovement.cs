@@ -35,6 +35,7 @@ namespace MoreMountains.NiceTouch
 	    {
 			Vector3 movement = new Vector3 (_horizontalMovement, 0.0f, _verticalMovement);
 			_rigidbody.MovePosition(transform.position + movement * Speed * Time.deltaTime);
+
 	    }
 
 	    /// <summary>
