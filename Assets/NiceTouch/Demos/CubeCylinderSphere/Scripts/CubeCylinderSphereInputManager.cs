@@ -5,7 +5,7 @@ using MoreMountains.Tools;
 namespace MoreMountains.NiceTouch
 {	
 	/// <summary>
-	/// 이 영구 싱글톤은 입력을 처리하고 플레이어에게 명령을 보냅니다.
+	/// This persistent singleton handles the inputs and sends commands to the player
 	/// </summary>
 	public class CubeCylinderSphereInputManager : MonoBehaviour
 	{
@@ -17,9 +17,10 @@ namespace MoreMountains.NiceTouch
 	    protected float _horizontalMove = 0;
 	    protected float _verticalMove = 0;
 
-	    
+
+
 	    /// <summary>
-	    /// 업데이트 시 다양한 명령을 확인하여 플레이어에게 전송합니다.
+	    /// At update, we check the various commands and send them to the player.
 	    /// </summary>
 	    protected virtual void Update()
 		{		
@@ -48,5 +49,7 @@ namespace MoreMountains.NiceTouch
 		{
 			CubeCharacter.Jump();
 		}
+
+
 	}
 }
