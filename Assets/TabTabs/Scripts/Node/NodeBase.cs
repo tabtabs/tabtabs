@@ -12,9 +12,11 @@ namespace TabTabs.NamChanwoo
 
         public  NodeSheet nodeSheet => m_sheet;
         
-        
         //이 노트가 현재 히트 할 수 있는 가?
         private bool m_isHitable = false;
+        
+        public virtual void Init(){}
+        
 
     }
 }
