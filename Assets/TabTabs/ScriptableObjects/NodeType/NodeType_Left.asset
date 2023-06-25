@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9648bafaf741b1d48bb7198bfc4fcbe2, type: 3}
   m_Name: NodeType_Left
   m_EditorClassIdentifier: 
-  m_NodeType: 2
+  m_NodeType: 1
   m_NodeImage: {fileID: 21300000, guid: 09bc1c313e9399a40ad5f1f632ef4e74, type: 3}

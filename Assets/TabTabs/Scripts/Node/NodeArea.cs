@@ -5,6 +5,7 @@ using Spine.Unity;
 using UnityEngine;
 
 using Sirenix.OdinInspector;
+using UnityEngine.Serialization;
 
 namespace TabTabs.NamChanwoo
 {
@@ -31,15 +32,19 @@ namespace TabTabs.NamChanwoo
         [EnumToggleButtons, HideLabel]
         [SerializeField] private EAreaType m_areaType = EAreaType.Collider2D;
         
-        [GUIColor(0.3f, 0.8f, 0.8f, 1f)]
-        /*[MinValue(1),MaxValue(10)]*/
-        [ProgressBar(1, 10)]
-        [SerializeField] private int rows = 3;
         
         [GUIColor(0.3f, 0.8f, 0.8f, 1f)]
         /*[MinValue(1),MaxValue(10)]*/
         [ProgressBar(1, 10)]
-        [SerializeField] private int columns = 7;
+        [SerializeField] private int m_rows = 7;
+        
+        [GUIColor(0.3f, 0.8f, 0.8f, 1f)]
+        /*[MinValue(1),MaxValue(10)]*/
+        [ProgressBar(1, 10)]
+        [SerializeField] private int m_columns = 3;
+        
+        public int Rows => m_rows;
+        public int Columns => m_columns;
         
         [GUIColor(0.3f, 0.8f, 0.8f, 1f)]
         [DisableIf("m_areaType", EAreaType.Collider2D)]
@@ -47,14 +52,11 @@ namespace TabTabs.NamChanwoo
         
         [Title("Debug Setting")]
         [GUIColor(0.9f, 0.24f, 0.38f, 1f)]
-        [SerializeField] private bool m_debugVisible = true;
+        [SerializeField] private bool m_debugVisible = false;
         
         private Vector2 m_boxSize;
         private Bounds m_spineBounds;
         private List<Vector2> m_gridCenters = new List<Vector2>();
-        
-      
-     
         
         
         // 마지막으로 알려진 위치, 크기 및 회전을 저장합니다.
@@ -64,8 +66,7 @@ namespace TabTabs.NamChanwoo
         
         private void Awake()
         {
-            boxCollider2D = GetComponent<BoxCollider2D>();
-            
+            boxCollider2D = GetComponentInParent<BoxCollider2D>();
             BoxSizeSetup();
             DivideBoxColliderArea(m_boxSize);
             
@@ -128,12 +129,12 @@ namespace TabTabs.NamChanwoo
         
         void DivideBoxColliderArea(Vector2 size)
         {
-            float rectWidth = size.x / columns;
-            float rectHeight = size.y / rows;
+            float rectWidth = size.x / m_columns;
+            float rectHeight = size.y / m_rows;
 
             m_gridCenters.Clear();
 
-            for (int i = 0; i < rows; i++)
+            for (int i = 0; i < m_rows; i++)
             {
                 // 각 행의 하단에 시작점을 정의합니다.
                 Vector2 startPoint;
@@ -146,14 +147,14 @@ namespace TabTabs.NamChanwoo
                     case EAreaType.SpineAnimation:
                         // 스켈레톤 경계의 최소 y값을 시작점으로 사용
                         startPoint = new Vector2(transform.position.x + m_spineBounds.center.x -size.x/2f,
-                                         m_spineBounds.center.y - m_spineBounds.extents.y) +
+                                         transform.position.y +m_spineBounds.center.y - m_spineBounds.extents.y) +
                                      new Vector2(0, rectHeight * i);
                         break;
                     
                     default: startPoint = Vector2.zero; break;
                 }
                 
-                for (int j = 0; j < columns; j++)
+                for (int j = 0; j < m_columns; j++)
                 {
                     Vector2 center = startPoint + new Vector2(rectWidth * (j + 0.5f), rectHeight * 0.5f);
                     m_gridCenters.Add(center);
@@ -181,25 +182,25 @@ namespace TabTabs.NamChanwoo
         
         public float GetRectangleWidth()
         {
-            return m_boxSize.x / columns;
+            return m_boxSize.x / m_columns;
         }
 
         public float GetRectangleHeight()
         {
-            return m_boxSize.y / rows;
+            return m_boxSize.y / m_rows;
         }
         
         public Vector2 GetGridPosition(int row, int column)
         {
             // Validate input
-            if (row < 0 || row >= rows || column < 0 || column >= columns)
+            if (row < 0 || row >= m_rows || column < 0 || column >= m_columns)
             {
                 Debug.LogError("Row or column out of bounds");
                 return Vector2.zero;
             }
 
             // Calculate index based on row and column number
-            int index = row * columns + column;
+            int index = row * m_columns + column;
 
             // Get center point
             return m_gridCenters[index];
@@ -222,8 +223,8 @@ namespace TabTabs.NamChanwoo
                 foreach (Vector2 center in m_gridCenters)
                 {
                     // Draw rectangle
-                    float rectWidth = m_boxSize.x / columns;
-                    float rectHeight = m_boxSize.y / rows;
+                    float rectWidth = m_boxSize.x / m_columns;
+                    float rectHeight = m_boxSize.y / m_rows;
                     Vector2 rectPosition = center - new Vector2(rectWidth / 2f, rectHeight / 2f);
                     Gizmos.DrawWireCube(rectPosition + new Vector2(rectWidth / 2f, rectHeight / 2f),
                         new Vector3(rectWidth, rectHeight, 0f));
