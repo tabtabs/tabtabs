@@ -41,3 +41,15 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Ground
+    uniqueID: 1144447055
+    locked: 0
+  - name: Enemy
+    uniqueID: 757855039
+    locked: 0
+  - name: System
+    uniqueID: 2573388921
+    locked: 0
+  - name: Effect
+    uniqueID: 590611611
+    locked: 0
