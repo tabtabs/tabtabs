@@ -32,21 +32,25 @@ using System.Collections;
 using UnityEngine;
 
 namespace Spine.Unity.Examples {
-	public class SpineBlinkPlayer : MonoBehaviour {
-		const int BlinkTrack = 1;
+    public class SpineBlinkPlayer : MonoBehaviour 
+    {
+        const int BlinkTrack = 1;
 
-		public AnimationReferenceAsset blinkAnimation;
-		public float minimumDelay = 0.15f;
-		public float maximumDelay = 3f;
+        public AnimationReferenceAsset blinkAnimation;
+        public float minimumDelay = 0.15f;
+        public float maximumDelay = 3f;
 
-		IEnumerator Start () {
-			SkeletonAnimation skeletonAnimation = GetComponent<SkeletonAnimation>();
-			if (skeletonAnimation == null) yield break;
-			while (true) {
-				skeletonAnimation.AnimationState.SetAnimation(SpineBlinkPlayer.BlinkTrack, blinkAnimation, false);
-				yield return new WaitForSeconds(Random.Range(minimumDelay, maximumDelay));
-			}
-		}
+        IEnumerator Start () 
+        {
+            SkeletonAnimation skeletonAnimation = GetComponent<SkeletonAnimation>();
+            if (skeletonAnimation == null) 
+                yield break;
+            while (true)
+            {
+                skeletonAnimation.AnimationState.SetAnimation(SpineBlinkPlayer.BlinkTrack, blinkAnimation, false);
+                yield return new WaitForSeconds(Random.Range(minimumDelay, maximumDelay));
+            }
+        }
 
-	}
+    }
 }

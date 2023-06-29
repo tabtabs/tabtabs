@@ -31,7 +31,8 @@ using System.Collections;
 using UnityEngine;
 
 namespace Spine.Unity.Examples {
-	public class SpineboyBeginnerInput : MonoBehaviour {
+	public class SpineboyBeginnerInput : MonoBehaviour
+	{
 		#region Inspector
 		public string horizontalAxis = "Horizontal";
 		public string attackButton = "Fire1";
@@ -46,10 +47,12 @@ namespace Spine.Unity.Examples {
 		}
 		#endregion
 
-		void Update () {
+		void Update () 
+		{
 			if (model == null) return;
 
 			float currentHorizontal = Input.GetAxisRaw(horizontalAxis);
+			
 			model.TryMove(currentHorizontal);
 
 			if (Input.GetButton(attackButton))
@@ -57,6 +60,7 @@ namespace Spine.Unity.Examples {
 
 			if (Input.GetButtonDown(aimButton))
 				model.StartAim();
+			
 			if (Input.GetButtonUp(aimButton))
 				model.StopAim();
 

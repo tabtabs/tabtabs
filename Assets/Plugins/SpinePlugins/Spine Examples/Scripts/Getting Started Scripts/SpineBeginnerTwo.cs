@@ -32,10 +32,11 @@ using System.Collections;
 using UnityEngine;
 
 namespace Spine.Unity.Examples {
-	public class SpineBeginnerTwo : MonoBehaviour {
+	public class SpineBeginnerTwo : MonoBehaviour
+	{
 
 		#region Inspector
-		// [SpineAnimation] attribute allows an Inspector dropdown of Spine animation names coming form SkeletonAnimation.
+		// [SpineAnimation] 속성은 SkeletonAnimation에서 오는 Spine 애니메이션 이름의 Inspector 드롭다운을 허용합니다.
 		[SpineAnimation]
 		public string runAnimationName;
 
@@ -60,13 +61,14 @@ namespace Spine.Unity.Examples {
 
 		SkeletonAnimation skeletonAnimation;
 
-		// Spine.AnimationState and Spine.Skeleton are not Unity-serialized objects. You will not see them as fields in the inspector.
+		// Spine.AnimationState 및 Spine.Skeleton은 Unity 직렬화 개체가 아닙니다. 인스펙터에서 필드로 볼 수 없습니다.
 		public Spine.AnimationState spineAnimationState;
 		public Spine.Skeleton skeleton;
 
-		void Start () {
-			// Make sure you get these AnimationState and Skeleton references in Start or Later.
-			// Getting and using them in Awake is not guaranteed by default execution order.
+		void Start () 
+		{
+			// Start 또는 Later에서 이러한 AnimationState 및 Skeleton 참조를 가져오는지 확인하십시오.
+			// Awake에서 가져오고 사용하는 것은 기본 실행 순서로 보장되지 않습니다.
 			skeletonAnimation = GetComponent<SkeletonAnimation>();
 			spineAnimationState = skeletonAnimation.AnimationState;
 			skeleton = skeletonAnimation.Skeleton;
@@ -74,12 +76,14 @@ namespace Spine.Unity.Examples {
 			StartCoroutine(DoDemoRoutine());
 		}
 
-		/// This is an infinitely repeating Unity Coroutine. Read the Unity documentation on Coroutines to learn more.
-		IEnumerator DoDemoRoutine () {
-			while (true) {
-				// SetAnimation is the basic way to set an animation.
-				// SetAnimation sets the animation and starts playing it from the beginning.
-				// Common Mistake: If you keep calling it in Update, it will keep showing the first pose of the animation, do don't do that.
+		/// 이것은 무한히 반복되는 Unity 코루틴입니다. 자세한 내용은 코루틴에 대한 Unity 문서를 참조하세요.
+		IEnumerator DoDemoRoutine () 
+		{
+			while (true) 
+			{
+				// SetAnimation은 애니메이션을 설정하는 기본적인 방법입니다.
+				// SetAnimation은 애니메이션을 설정하고 처음부터 재생을 시작합니다.
+				// 일반적인 실수: Update에서 계속 호출하면 애니메이션의 첫 번째 포즈가 계속 표시됩니다. 그렇게 하지 마십시오.
 
 				spineAnimationState.SetAnimation(0, walkAnimationName, true);
 				yield return new WaitForSeconds(runWalkDuration);
@@ -87,15 +91,16 @@ namespace Spine.Unity.Examples {
 				spineAnimationState.SetAnimation(0, runAnimationName, true);
 				yield return new WaitForSeconds(runWalkDuration);
 
-				// AddAnimation queues up an animation to play after the previous one ends.
+				// AddAnimation은 이전 애니메이션이 끝난 후 재생할 애니메이션을 대기열에 넣습니다.
 				spineAnimationState.SetAnimation(0, runToIdleAnimationName, false);
 				spineAnimationState.AddAnimation(0, idleAnimationName, true, 0);
-				yield return new WaitForSeconds(1f);
+				yield return new WaitForSeconds(5f);
 
-				skeleton.ScaleX = -1;       // skeleton allows you to flip the skeleton.
+				skeleton.ScaleX = -1;      // 스켈레톤을 사용하면 스켈레톤을 뒤집을 수 있습니다.
 				spineAnimationState.SetAnimation(0, idleTurnAnimationName, false);
 				spineAnimationState.AddAnimation(0, idleAnimationName, true, 0);
 				yield return new WaitForSeconds(0.5f);
+				
 				skeleton.ScaleX = 1;
 				spineAnimationState.SetAnimation(0, idleTurnAnimationName, false);
 				spineAnimationState.AddAnimation(0, idleAnimationName, true, 0);

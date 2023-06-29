@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 using Spine;
@@ -66,13 +67,32 @@ namespace TabTabs.NamChanwoo
         
         private void Awake()
         {
-            boxCollider2D = GetComponentInParent<BoxCollider2D>();
+            if (boxCollider2D==null)
+            {
+                boxCollider2D = GetComponentInParent<BoxCollider2D>();    
+            }
+            
             BoxSizeSetup();
             DivideBoxColliderArea(m_boxSize);
             
             m_lastPosition = transform.position;
             m_lastSize = m_boxSize;
             m_lastRotation = transform.rotation;
+        }
+
+        private void Start()
+        {
+            /*if (boxCollider2D==null)
+            {
+                boxCollider2D = GetComponentInParent<BoxCollider2D>();    
+            }
+            
+            BoxSizeSetup();
+            DivideBoxColliderArea(m_boxSize);
+            
+            m_lastPosition = transform.position;
+            m_lastSize = m_boxSize;
+            m_lastRotation = transform.rotation;*/
         }
 
         private void Update()
