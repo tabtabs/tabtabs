@@ -30,95 +30,119 @@
 using System.Collections;
 using UnityEngine;
 
-namespace Spine.Unity.Examples {
-	[SelectionBase]
-	public class SpineboyBeginnerModel : MonoBehaviour {
+namespace Spine.Unity.Examples 
+{
+    [SelectionBase]
+    public class SpineboyBeginnerModel : MonoBehaviour 
+    {
 
-		#region Inspector
-		[Header("Current State")]
-		public SpineBeginnerBodyState state;
-		public bool facingLeft;
-		[Range(-1f, 1f)]
-		public float currentSpeed;
+        #region Inspector
+		
+        [Header("Current State")]
+        public SpineBeginnerBodyState state;
+		
+        public bool facingLeft;
+		
+        [Range(-1f, 1f)]
+        public float currentSpeed;
 
-		[Header("Balance")]
-		public float shootInterval = 0.12f;
-		#endregion
+        [Header("Balance")]
+        public float shootInterval = 0.12f;
+		
+        #endregion
 
-		float lastShootTime;
-		public event System.Action ShootEvent;  // Lets other scripts know when Spineboy is shooting. Check C# Documentation to learn more about events and delegates.
-		public event System.Action StartAimEvent;   // Lets other scripts know when Spineboy is aiming.
-		public event System.Action StopAimEvent;   // Lets other scripts know when Spineboy is no longer aiming.
+        float lastShootTime;
+		
+        public event System.Action ShootEvent;  // Spineboy가 촬영할 때 다른 스크립트에 알립니다. 이벤트 및 대리자에 대한 자세한 내용은 C# 설명서를 확인하세요.
+        public event System.Action StartAimEvent;   // Spineboy가 언제 조준하는지 다른 스크립트에 알립니다.
+        public event System.Action StopAimEvent;   // Spineboy가 더 이상 조준하지 않을 때 다른 스크립트에 알립니다.
 
-		#region API
-		public void TryJump () {
-			StartCoroutine(JumpRoutine());
-		}
+        #region API
+		
+        public void TryJump () 
+        {
+            StartCoroutine(JumpRoutine());
+        }
 
-		public void TryShoot () {
-			float currentTime = Time.time;
+        public void TryShoot ()
+        {
+            float currentTime = Time.time;
 
-			if (currentTime - lastShootTime > shootInterval) {
-				lastShootTime = currentTime;
-				if (ShootEvent != null) ShootEvent();   // Fire the "ShootEvent" event.
-			}
-		}
+            if (currentTime - lastShootTime > shootInterval) 
+            {
+                lastShootTime = currentTime;
+                if (ShootEvent != null)
+                    ShootEvent();   // Fire the "ShootEvent" event.
+            }
+        }
 
-		public void StartAim () {
-			if (StartAimEvent != null) StartAimEvent();   // Fire the "StartAimEvent" event.
-		}
+        public void StartAim () 
+        {
+            if (StartAimEvent != null)
+                StartAimEvent();   // Fire the "StartAimEvent" event.
+        }
 
-		public void StopAim () {
-			if (StopAimEvent != null) StopAimEvent();   // Fire the "StopAimEvent" event.
-		}
+        public void StopAim () 
+        {
+            if (StopAimEvent != null)
+                StopAimEvent();   // Fire the "StopAimEvent" event.
+        }
 
-		public void TryMove (float speed) {
-			currentSpeed = speed; // show the "speed" in the Inspector.
+        public void TryMove (float speed) 
+        {
+            currentSpeed = speed; // show the "speed" in the Inspector.
 
-			if (speed != 0) {
-				bool speedIsNegative = (speed < 0f);
-				facingLeft = speedIsNegative; // Change facing direction whenever speed is not 0.
-			}
+            if (speed != 0) 
+            {
+                bool speedIsNegative = (speed < 0f);
+                facingLeft = speedIsNegative; // 속도가 0이 아닐 때마다 향하는 방향을 변경합니다.
+            }
 
-			if (state != SpineBeginnerBodyState.Jumping) {
-				state = (speed == 0) ? SpineBeginnerBodyState.Idle : SpineBeginnerBodyState.Running;
-			}
+            if (state != SpineBeginnerBodyState.Jumping) 
+            {
+                state = (speed == 0) ? SpineBeginnerBodyState.Idle : SpineBeginnerBodyState.Running;
+            }
 
-		}
-		#endregion
+        }
+        #endregion
 
-		IEnumerator JumpRoutine () {
-			if (state == SpineBeginnerBodyState.Jumping) yield break;   // Don't jump when already jumping.
+        IEnumerator JumpRoutine () 
+        {
+            if (state == SpineBeginnerBodyState.Jumping) 
+                yield break;   // Don't jump when already jumping.
 
-			state = SpineBeginnerBodyState.Jumping;
+            state = SpineBeginnerBodyState.Jumping;
 
-			// Fake jumping.
-			{
-				Vector3 pos = transform.localPosition;
-				const float jumpTime = 1.2f;
-				const float half = jumpTime * 0.5f;
-				const float jumpPower = 20f;
-				for (float t = 0; t < half; t += Time.deltaTime) {
-					float d = jumpPower * (half - t);
-					transform.Translate((d * Time.deltaTime) * Vector3.up);
-					yield return null;
-				}
-				for (float t = 0; t < half; t += Time.deltaTime) {
-					float d = jumpPower * t;
-					transform.Translate((d * Time.deltaTime) * Vector3.down);
-					yield return null;
-				}
-				transform.localPosition = pos;
-			}
+            // Fake jumping.
+            {
+                Vector3 pos = transform.localPosition;
+                const float jumpTime = 1.2f;
+                const float half = jumpTime * 0.5f;
+                const float jumpPower = 20f;
+                for (float t = 0; t < half; t += Time.deltaTime) 
+                {
+                    float d = jumpPower * (half - t);
+                    transform.Translate((d * Time.deltaTime) * Vector3.up);
+                    yield return null;
+                }
+                for (float t = 0; t < half; t += Time.deltaTime) 
+                {
+                    float d = jumpPower * t;
+                    transform.Translate((d * Time.deltaTime) * Vector3.down);
+                    yield return null;
+                }
+                transform.localPosition = pos;
+            }
 
-			state = SpineBeginnerBodyState.Idle;
-		}
+            state = SpineBeginnerBodyState.Idle;
+        }
 
-	}
+    }
 
-	public enum SpineBeginnerBodyState {
-		Idle,
-		Running,
-		Jumping
-	}
+    public enum SpineBeginnerBodyState
+    {
+        Idle,
+        Running,
+        Jumping
+    }
 }

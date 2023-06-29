@@ -31,8 +31,10 @@ using Spine.Unity;
 using System.Collections;
 using UnityEngine;
 
-namespace Spine.Unity.Examples {
-	public class Raptor : MonoBehaviour {
+namespace Spine.Unity.Examples 
+{
+	public class Raptor : MonoBehaviour
+	{
 
 		#region Inspector
 		public AnimationReferenceAsset walk;
@@ -42,17 +44,20 @@ namespace Spine.Unity.Examples {
 
 		SkeletonAnimation skeletonAnimation;
 
-		void Start () {
+		void Start ()
+		{
 			skeletonAnimation = GetComponent<SkeletonAnimation>();
 			StartCoroutine(GunGrabRoutine());
 		}
 
-		IEnumerator GunGrabRoutine () {
-			// Play the walk animation on track 0.
+		IEnumerator GunGrabRoutine ()
+		{
+			// 트랙 0에서 걷기 애니메이션을 재생합니다.
 			skeletonAnimation.AnimationState.SetAnimation(0, walk, true);
 
-			// Repeatedly play the gungrab and gunkeep animation on track 1.
-			while (true) {
+			// 트랙 1에서 gungrab 및 gunkeep 애니메이션을 반복 재생합니다.
+			while (true)
+			{
 				yield return new WaitForSeconds(Random.Range(0.5f, 3f));
 				skeletonAnimation.AnimationState.SetAnimation(1, gungrab, false);
 
