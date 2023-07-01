@@ -18,6 +18,8 @@ namespace TabTabs.NamChanwoo
         // System Access Shortcuts
         public static SpawnSystem SpawnSystem => GetSystem<SpawnSystem>();
         public static NotificationSystem NotificationSystem => GetSystem<NotificationSystem>();
+        
+        
 
         private void Awake()
         {

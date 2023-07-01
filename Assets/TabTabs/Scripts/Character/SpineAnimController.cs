@@ -36,7 +36,6 @@ public class SpineAnimController : MonoBehaviour
     {
         if (trackentry.Animation.Name == "atk")
         {
-            Debug.Log("애니메이션 완료");
             m_model.currentState = ECharacterState.Idle;
         }
     }
@@ -75,7 +74,6 @@ public class SpineAnimController : MonoBehaviour
     
     void PlayNewStableAnimation () 
     {
-   
         ECharacterState newModelState = m_model.currentState;
         
         Debug.Log("오크 상태 : " +newModelState);
@@ -90,7 +88,11 @@ public class SpineAnimController : MonoBehaviour
         {
             nextAnimation = m_attackAnim;
         }
-        else 
+        else if (newModelState == ECharacterState.Hit)
+        {
+            nextAnimation = m_hitAnim;
+        }
+        else  // idle 경우
         {
             nextAnimation = m_idleAnim;
         }

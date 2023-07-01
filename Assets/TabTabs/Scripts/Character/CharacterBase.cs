@@ -12,7 +12,8 @@ namespace TabTabs.NamChanwoo
         Idle,
         Running,
         Hit,
-        Attacking
+        Attacking,
+        Die
     }
     
     public enum EDirection

@@ -26,7 +26,6 @@ public class EnemyBase : CharacterBase
 
     private void Start()
     {
-        
     }
     
     public void AddNodes(Node spawnedNode)

@@ -798,9 +798,33 @@ PrefabInstance:
       propertyPath: attackGaugeSlider
       value: 
       objectReference: {fileID: 123383741}
+    - target: {fileID: -1088732773587229446, guid: c1b71a9ce20a20d4c9e2ed771d788c22, type: 3}
+      propertyPath: m_initialattackGauge
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: -1088732773587229446, guid: c1b71a9ce20a20d4c9e2ed771d788c22, type: 3}
+      propertyPath: m_soughtDistanceFromTarget
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 227375368035209049, guid: c1b71a9ce20a20d4c9e2ed771d788c22, type: 3}
       propertyPath: m_Name
       value: Orc
+      objectReference: {fileID: 0}
+    - target: {fileID: 837932290371135754, guid: c1b71a9ce20a20d4c9e2ed771d788c22, type: 3}
+      propertyPath: m_Offset.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 837932290371135754, guid: c1b71a9ce20a20d4c9e2ed771d788c22, type: 3}
+      propertyPath: m_Offset.y
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1570132502140558800, guid: c1b71a9ce20a20d4c9e2ed771d788c22, type: 3}
+      propertyPath: m_areaType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1570132502140558800, guid: c1b71a9ce20a20d4c9e2ed771d788c22, type: 3}
+      propertyPath: m_debugVisible
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3346095170518394496, guid: c1b71a9ce20a20d4c9e2ed771d788c22, type: 3}
       propertyPath: m_RootOrder

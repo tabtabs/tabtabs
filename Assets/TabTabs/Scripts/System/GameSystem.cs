@@ -9,7 +9,6 @@ namespace TabTabs.NamChanwoo
         public virtual void OnSystemInit() { }
         public virtual void OnSystemStart() { }
         public virtual void OnSystemStop() { }
-        
     }
 }
 
