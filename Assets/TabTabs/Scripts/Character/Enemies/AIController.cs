@@ -28,11 +28,7 @@ namespace TabTabs.NamChanwoo
         
         private CharacterBase m_target = null; // AI 캐릭터의 목표
         
-        public float AttackGauge => m_attackGauge; 
-     
-        private void Awake() 
-        {
-        }
+        public float AttackGauge => m_attackGauge;
 
         private void Start()
         {

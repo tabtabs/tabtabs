@@ -12,7 +12,8 @@ namespace TabTabs.NamChanwoo
     {
         Up,
         Left,
-        Right
+        Right,
+        Default
     }
     
     [CreateAssetMenu(menuName = AssetMenuIndexer.TabTabs_NodeType + nameof(NodeSheet))]
