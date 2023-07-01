@@ -17,7 +17,7 @@ public class EnemyBase : CharacterBase
     public NodeArea nodeArea => m_nodeArea;
     
     //에너미가 소유하고 있는 노드들 입니다.
-    Queue<Node> m_nodeQueue = new Queue<Node>();
+    public Queue<Node> m_nodeQueue = new Queue<Node>();
 
     private void Awake()
     {

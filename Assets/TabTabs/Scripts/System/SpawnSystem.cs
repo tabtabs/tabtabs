@@ -26,7 +26,7 @@ namespace TabTabs.NamChanwoo
         
         public List<GameObject> monsterPrefab;
         
-        [SerializeField] private GameObject Enemy;
+        [SerializeField] public GameObject Enemy;
         
         private void Awake()
         {
@@ -128,14 +128,14 @@ namespace TabTabs.NamChanwoo
         
         public void SpawnMonster(Vector3 position)
         {
-            /*GameObject monsterGO = Instantiate(monsterPrefab, position, Quaternion.identity);
+            GameObject monsterGO = Instantiate(monsterPrefab, position, Quaternion.identity);
             CharacterBase character = monsterGO.GetComponent<CharacterBase>();
 
-            if(character != null)
+            if (character != null)
             {
                 // notify the system that a monster has been spawned
                 notificationSystem.SceenMonsterSpwaned.Invoke(character);
-            }*/
+            }
         }
 
     }
