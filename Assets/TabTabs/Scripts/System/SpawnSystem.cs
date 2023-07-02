@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 namespace TabTabs.NamChanwoo
 {
@@ -45,6 +46,8 @@ namespace TabTabs.NamChanwoo
 
         private void Start()
         {
+            GameManager.NotificationSystem.SceneMonsterDeath.AddListener(HandleSceneMonsterDeath);
+            
             // SpawnLocation 자식 개체 찾기
             m_SpawnLocation = transform.Find("SpawnLocation").gameObject;
             if (m_SpawnLocation == null)
@@ -52,10 +55,22 @@ namespace TabTabs.NamChanwoo
                 Debug.LogError("하위 개체로 SpawnLocation을 찾을 수 없습니다.");
                 return;
             }
-
+            
             SpawnMonster();
         }
-        
+
+        private void HandleSceneMonsterDeath(EnemyBase arg0)
+        {
+            float delayTime = Random.Range(1.0f, 3.0f);
+            StartCoroutine(DelaySpawn(delayTime));
+        }
+
+        private IEnumerator DelaySpawn(float delayTime)
+        {
+            yield return new WaitForSeconds(delayTime);
+            SpawnMonster();
+        }
+
         public void SpawnNode(EnemyBase enemyBase)
         {
             //노드가 0개가 아니라면 생성 된 노드를 삭제하고 Queue를 비웁니다.

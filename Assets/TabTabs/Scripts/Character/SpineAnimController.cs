@@ -47,20 +47,27 @@ public class SpineAnimController : MonoBehaviour
         {
             m_model.ChangeState -= PlayNewStableAnimation;
         }
+        m_skeletonAnimation.AnimationState.Complete -= HandleAnimCompleteEvent;
     }
 
     private void HandleAnimCompleteEvent(TrackEntry trackEntry)
     {
         if (trackEntry.Animation.Name == "atk")
         {
-            m_model.CurrentState = ECharacterState.Idle;
+            Debug.Log("어택 애니메이션 끝남");
+            if (m_model.CurrentState != ECharacterState.Die)
+            {
+                m_model.SetState(ECharacterState.Idle);
+            }
+            return;
+        }
+        if (trackEntry.Animation.Name == "Damages")
+        {
+            Destroy(m_model.gameObject);
+            return;
         }
     }
     
-    void AttackAnimEvent () 
-    {
-        m_model.CurrentState = ECharacterState.Idle;
-    }
     
     void PlayNewStableAnimation (ECharacterState newState) 
     {
@@ -80,6 +87,9 @@ public class SpineAnimController : MonoBehaviour
                 nextAnimation = m_attackAnim;
                 break;
             case ECharacterState.Hit:
+                nextAnimation = m_hitAnim;
+                break;
+            case ECharacterState.Die:
                 nextAnimation = m_hitAnim;
                 break;
             default:
