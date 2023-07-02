@@ -23,17 +23,14 @@ namespace TabTabs.NamChanwoo
     {
         protected Rigidbody2D m_rigidbody;
         
-        [Header("Movement Settings")]
-        [SerializeField] protected float m_moveSpeed = 4.0f;
-        
         protected Vector2 m_movementDirection;
-        
-        private ECharacterState m_currentState = ECharacterState.Idle;
+
+        private ECharacterState m_currentState;
         
         public ECharacterState CurrentState
         {
             get => m_currentState;
-            set
+            private set
             {
                 if (m_currentState != value)
                 {
@@ -52,52 +49,45 @@ namespace TabTabs.NamChanwoo
         public bool IsMoving() => m_movementDirection.magnitude > 0.0f;
 
 
-        private void Start()
+        private void Awake()
         {
             if (m_rigidbody ==null)
             {
                 m_rigidbody = GetComponent<Rigidbody2D>();
             }
         }
+
+        private void Start()
+        {
+          
+        }
         
         protected void FixedUpdate()
         {
-            TryMove(m_movementDirection, m_moveSpeed);
         }
         
-        protected void TryMove(Vector2 direction, float speed)
+        public void SetState(ECharacterState newState)
         {
-            if (m_rigidbody== null)
-                return;
-            
-            if (direction == Vector2.zero)
+            if (m_currentState != newState)
             {
-                m_rigidbody.velocity = Vector2.zero;
-                
-                if (m_currentState!= ECharacterState.Attacking)
-                {
-                    m_currentState = ECharacterState.Idle;
-                }
+                m_currentState = newState;
+                ChangeState?.Invoke(m_currentState);
             }
-            else
-            {
-                Vector2 newPosition = m_rigidbody.position + direction * speed * Time.fixedDeltaTime;
-                m_rigidbody.MovePosition(newPosition);
-                m_currentState = ECharacterState.Running;
-            }
-            
-            ChangeState?.Invoke(m_currentState);
         }
         
         virtual public void Attack()
         {
-            m_currentState = ECharacterState.Attacking;
-            ChangeState?.Invoke(m_currentState);
+            
         }
         
         public void SetMovementDirection(Vector2 direction)
         {
             m_movementDirection = direction;
+        }
+
+        virtual public void Die()
+        {
+            
         }
     }
 

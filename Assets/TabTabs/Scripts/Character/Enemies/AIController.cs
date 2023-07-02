@@ -43,7 +43,8 @@ namespace TabTabs.NamChanwoo
                     m_enemyCharacter.SetMovementDirection(Vector2.zero);
                     
                     if (!m_isCoroutineAttack)
-                        StartCoroutine(CountdownAttackGauge());
+                        AttackProcess();
+                        
                 }
                 else
                 {
@@ -56,10 +57,7 @@ namespace TabTabs.NamChanwoo
         {
             m_isCoroutineAttack = true;
             
-            Debug.Log("코루틴시작!");
-            bool IsIdle = m_enemyCharacter.CurrentState != ECharacterState.Attacking;
-            bool IsAttackGauge = m_enemyCharacter.AttackGauge > 0;
-            while( IsIdle|| IsAttackGauge)
+            while( m_enemyCharacter.AttackGauge > 0)
             {
                 yield return new WaitForSeconds(Time.fixedDeltaTime);
                 m_enemyCharacter.IncreaseAttackGauge(-Time.fixedDeltaTime);
@@ -68,7 +66,6 @@ namespace TabTabs.NamChanwoo
             m_enemyCharacter.Attack();
             m_isCoroutineAttack = false;
         }
-      
         
         private CharacterBase FindTarget()
         {
@@ -105,17 +102,13 @@ namespace TabTabs.NamChanwoo
             return targetMovementDirection;
         }
         
-        // 타겟 공격 시도
-        private void AttackProcess(float distanceToTarget)
+        private void AttackProcess()
         {
-            if(m_enemyCharacter.CurrentState != ECharacterState.Attacking)
+            if(m_enemyCharacter.CurrentState != ECharacterState.Attacking && m_enemyCharacter.CurrentState != ECharacterState.Die)
             {
                 StartCoroutine(CountdownAttackGauge());
             }
         }
-        
-      
-        
         
         private void OnDrawGizmosSelected()
         {

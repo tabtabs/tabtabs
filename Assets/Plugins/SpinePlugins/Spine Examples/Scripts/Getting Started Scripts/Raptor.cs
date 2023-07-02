@@ -64,7 +64,6 @@ namespace Spine.Unity.Examples
 				yield return new WaitForSeconds(Random.Range(0.5f, 3f));
 				skeletonAnimation.AnimationState.SetAnimation(1, gunkeep, false);
 			}
-
 		}
 
 	}

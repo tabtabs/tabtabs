@@ -18,7 +18,7 @@ namespace TabTabs.NamChanwoo
        
         [Header("Attack Properties")]
         public Slider m_attackGaugeSlider;
-        [SerializeField] private float m_chargAttackGauge = 10.0f; 
+        [FormerlySerializedAs("m_chargAttackGauge")] [SerializeField] private float m_maxAttackGauge = 10.0f; 
         private float m_attackGauge = 10.0f; // 공격 쿨다운
         
         public float AttackGauge
@@ -26,11 +26,15 @@ namespace TabTabs.NamChanwoo
             get => CurrentState == ECharacterState.Attacking ? 0.0f : m_attackGauge;
             set
             {
-                m_attackGauge = Mathf.Clamp(value, 0.0f, m_chargAttackGauge);
+                m_attackGauge = Mathf.Clamp(value, 0.0f, m_maxAttackGauge);
                 UpdateSliderAttackUI();
             }
         }
 
+        
+        [Header("Movement Settings")]
+        [SerializeField] protected float m_moveSpeed = 4.0f;
+        
         private void Awake()
         {
             m_nodeArea = GetComponentInChildren<NodeArea>();
@@ -42,15 +46,43 @@ namespace TabTabs.NamChanwoo
             {
                 m_rigidbody = GetComponent<Rigidbody2D>();
             }
+            
         }
 
+        protected void Update()
+        {
+            Debug.Log("EnemyBase Update : " + CurrentState);
+        }
+
+        protected void FixedUpdate()
+        {
+            if (m_rigidbody== null)
+                return;
+            
+            if (m_movementDirection == Vector2.zero)
+            {
+                m_rigidbody.velocity = Vector2.zero;
+                
+                if (CurrentState != ECharacterState.Die && CurrentState != ECharacterState.Attacking)
+                {
+                    SetState(ECharacterState.Idle);
+                }
+            }
+            else
+            {
+                Vector2 newPosition = m_rigidbody.position + m_movementDirection * (m_moveSpeed * Time.fixedDeltaTime);
+                m_rigidbody.MovePosition(newPosition);
+                SetState(ECharacterState.Running);
+            }
+        }
+        
         public void SetupAttackSliderUI(Slider attackSliderUI)
         {
             if (m_attackGaugeSlider ==null)
             {
                 m_attackGaugeSlider = attackSliderUI;
-                m_attackGauge = m_chargAttackGauge;
-                m_attackGaugeSlider.maxValue = m_chargAttackGauge;
+                m_attackGauge = m_maxAttackGauge;
+                m_attackGaugeSlider.maxValue = m_maxAttackGauge;
                 m_attackGaugeSlider.value = m_attackGauge;
             }
         }
@@ -59,18 +91,20 @@ namespace TabTabs.NamChanwoo
         {
             if (m_attackGaugeSlider != null)
             {
-                m_attackGaugeSlider.maxValue = m_chargAttackGauge;
+                m_attackGaugeSlider.maxValue = m_maxAttackGauge;
                 m_attackGaugeSlider.value = m_attackGauge;
             }
         }
         
         virtual public void Attack()
         {
-            CurrentState = ECharacterState.Attacking;
-            AttackGauge = m_chargAttackGauge;
+            if (CurrentState != ECharacterState.Die)
+            {
+                SetState(ECharacterState.Attacking);
+                AttackGauge = m_maxAttackGauge;
+            }
         }
-        
-        
+
         public void AddNodes(Node spawnedNode)
         {
             m_nodeQueue.Enqueue(spawnedNode);
@@ -89,6 +123,13 @@ namespace TabTabs.NamChanwoo
         public bool IsAttackGaugeEmpty()
         {
             return !(AttackGauge > 0.0f);
+        }
+
+        public void Die()
+        {
+            SetState(ECharacterState.Die);
+            
+            GameManager.NotificationSystem.SceneMonsterDeath?.Invoke(this);
         }
     }
 }

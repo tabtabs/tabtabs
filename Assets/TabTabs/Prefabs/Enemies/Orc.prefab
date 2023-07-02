@@ -35,7 +35,7 @@ Transform:
   - {fileID: 8415584063995988441}
   - {fileID: 8574342179102367607}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7939231504027900394
 MonoBehaviour:
@@ -49,7 +49,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de46fa355805e234fb9848da20cec3fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_moveSpeed: 3
+  m_attackGaugeSlider: {fileID: 0}
+  m_maxAttackGauge: 2
+  m_moveSpeed: 6
 --- !u!114 &-1088732773587229446
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,12 +64,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07d548f225bc1e8459513d8dd4f0d1f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_character: {fileID: 7939231504027900394}
+  m_enemyCharacter: {fileID: 7939231504027900394}
   m_detectionArea: {x: 30, y: 15}
   m_targetDistance: 1
   m_soughtDistanceFromTarget: 2
-  m_attackGaugeSlider: {fileID: 0}
-  m_initialAttackGauge: 10
 --- !u!50 &96012299828397776
 Rigidbody2D:
   serializedVersion: 4
