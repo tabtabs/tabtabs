@@ -2,41 +2,93 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Spine;
-using Spine.Unity;
-using TabTabs.NamChanwoo;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 
-
-
-public class EnemyBase : CharacterBase
+namespace TabTabs.NamChanwoo
 {
-    private NodeArea m_nodeArea;
-    
-    public NodeArea nodeArea => m_nodeArea;
-    
-    //에너미가 소유하고 있는 노드들 입니다.
-    public Queue<Node> m_nodeQueue = new Queue<Node>();
-
-    private void Awake()
+    public class EnemyBase : CharacterBase
     {
-        m_nodeArea = GetComponentInChildren<NodeArea>();
-    }
-
-    private void Start()
-    {
+        private NodeArea m_nodeArea;
         
-    }
-    
-    public void AddNodes(Node spawnedNode)
-    {
-        m_nodeQueue.Enqueue(spawnedNode);
-    }
-    
+        public NodeArea nodeArea => m_nodeArea;
 
-    public Queue<Node> GetOwnNodes()
-    {
-        return m_nodeQueue;
+        private Queue<Node> m_nodeQueue = new Queue<Node>();
+       
+        [Header("Attack Properties")]
+        public Slider m_attackGaugeSlider;
+        [SerializeField] private float m_chargAttackGauge = 10.0f; 
+        private float m_attackGauge = 10.0f; // 공격 쿨다운
+        
+        public float AttackGauge
+        {
+            get => CurrentState == ECharacterState.Attacking ? 0.0f : m_attackGauge;
+            set
+            {
+                m_attackGauge = Mathf.Clamp(value, 0.0f, m_chargAttackGauge);
+                UpdateSliderAttackUI();
+            }
+        }
+
+        private void Awake()
+        {
+            m_nodeArea = GetComponentInChildren<NodeArea>();
+        }
+        
+        private void Start()
+        {
+            if (m_rigidbody ==null)
+            {
+                m_rigidbody = GetComponent<Rigidbody2D>();
+            }
+        }
+
+        public void SetupAttackSliderUI(Slider attackSliderUI)
+        {
+            if (m_attackGaugeSlider ==null)
+            {
+                m_attackGaugeSlider = attackSliderUI;
+                m_attackGauge = m_chargAttackGauge;
+                m_attackGaugeSlider.maxValue = m_chargAttackGauge;
+                m_attackGaugeSlider.value = m_attackGauge;
+            }
+        }
+
+        private void UpdateSliderAttackUI()
+        {
+            if (m_attackGaugeSlider != null)
+            {
+                m_attackGaugeSlider.maxValue = m_chargAttackGauge;
+                m_attackGaugeSlider.value = m_attackGauge;
+            }
+        }
+        
+        virtual public void Attack()
+        {
+            CurrentState = ECharacterState.Attacking;
+            AttackGauge = m_chargAttackGauge;
+        }
+        
+        
+        public void AddNodes(Node spawnedNode)
+        {
+            m_nodeQueue.Enqueue(spawnedNode);
+        }
+
+        public Queue<Node> GetOwnNodes()
+        {
+            return m_nodeQueue;
+        }
+        
+        public void IncreaseAttackGauge(float amount)
+        {
+            AttackGauge += amount;
+        }
+        
+        public bool IsAttackGaugeEmpty()
+        {
+            return !(AttackGauge > 0.0f);
+        }
     }
 }

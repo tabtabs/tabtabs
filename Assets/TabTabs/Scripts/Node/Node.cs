@@ -13,6 +13,8 @@ namespace TabTabs.NamChanwoo
         [SerializeField] private GameObject m_button;
         public GameObject nodeButton => m_button;
         
+        
+        
 
         public override void Init()
         {

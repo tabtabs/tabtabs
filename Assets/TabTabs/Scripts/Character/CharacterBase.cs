@@ -1,9 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Numerics;
 using UnityEngine;
-using Vector2 = UnityEngine.Vector2;
+
 
 namespace TabTabs.NamChanwoo
 {
@@ -12,52 +9,67 @@ namespace TabTabs.NamChanwoo
         Idle,
         Running,
         Hit,
-        Attacking
+        Attacking,
+        Die
     }
     
     public enum EDirection
     {
         Left,
         Right,
-        Default = Left
     }
 
     public class CharacterBase : MonoBehaviour
     {
-        [Header("References")]
-        [SerializeField] private Rigidbody2D m_rigidbody = null;
+        protected Rigidbody2D m_rigidbody;
         
         [Header("Movement Settings")]
-        [SerializeField] private float m_moveSpeed = 4.0f;
-        private Vector2 m_movementDirection;
+        [SerializeField] protected float m_moveSpeed = 4.0f;
         
-        ECharacterState m_currentState = ECharacterState.Idle;
+        protected Vector2 m_movementDirection;
         
-        public ECharacterState currentState
+        private ECharacterState m_currentState = ECharacterState.Idle;
+        
+        public ECharacterState CurrentState
         {
             get => m_currentState;
-            set => m_currentState = value;
+            set
+            {
+                if (m_currentState != value)
+                {
+                    m_currentState = value;
+                    ChangeState?.Invoke(m_currentState);
+                }
+            }
         }
-
-
-        public event Action<ECharacterState> ChangeState;
-
         
+        public event Action<ECharacterState> ChangeState;
+        
+        public bool IsMovingUp() => m_movementDirection.y > 0.0f;
+        public bool IsMovingDown() => m_movementDirection.y < 0.0f;
+        public bool IsMovingLeft() => m_movementDirection.x < 0.0f;
+        public bool IsMovingRight() => m_movementDirection.x > 0.0f;
+        public bool IsMoving() => m_movementDirection.magnitude > 0.0f;
+
+
         private void Start()
         {
-            if (m_rigidbody == null)
+            if (m_rigidbody ==null)
             {
                 m_rigidbody = GetComponent<Rigidbody2D>();
             }
         }
-
-        private void FixedUpdate()
+        
+        protected void FixedUpdate()
         {
             TryMove(m_movementDirection, m_moveSpeed);
         }
         
-        private void TryMove(Vector2 direction, float speed)
+        protected void TryMove(Vector2 direction, float speed)
         {
+            if (m_rigidbody== null)
+                return;
+            
             if (direction == Vector2.zero)
             {
                 m_rigidbody.velocity = Vector2.zero;
@@ -77,7 +89,6 @@ namespace TabTabs.NamChanwoo
             ChangeState?.Invoke(m_currentState);
         }
         
-        
         virtual public void Attack()
         {
             m_currentState = ECharacterState.Attacking;
@@ -88,12 +99,6 @@ namespace TabTabs.NamChanwoo
         {
             m_movementDirection = direction;
         }
-        
-        public bool IsMovingUp() => m_movementDirection.y > 0.0f;
-        public bool IsMovingDown() => m_movementDirection.y < 0.0f;
-        public bool IsMovingLeft() => m_movementDirection.x < 0.0f;
-        public bool IsMovingRight() => m_movementDirection.x > 0.0f;
-        public bool IsMoving() => m_movementDirection.magnitude > 0.0f;
     }
 
 }

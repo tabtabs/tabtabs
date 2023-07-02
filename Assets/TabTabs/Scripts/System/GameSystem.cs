@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 
 namespace TabTabs.NamChanwoo
@@ -9,7 +8,6 @@ namespace TabTabs.NamChanwoo
         public virtual void OnSystemInit() { }
         public virtual void OnSystemStart() { }
         public virtual void OnSystemStop() { }
-        
     }
 }
 
