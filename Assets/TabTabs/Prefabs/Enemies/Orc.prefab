@@ -35,7 +35,7 @@ Transform:
   - {fileID: 8415584063995988441}
   - {fileID: 8574342179102367607}
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &7939231504027900394
 MonoBehaviour:
@@ -49,8 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de46fa355805e234fb9848da20cec3fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_rigidbody: {fileID: 96012299828397776}
-  m_moveSpeed: 2
+  m_moveSpeed: 3
 --- !u!114 &-1088732773587229446
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67,8 +66,8 @@ MonoBehaviour:
   m_detectionArea: {x: 30, y: 15}
   m_targetDistance: 1
   m_soughtDistanceFromTarget: 2
-  attackGaugeSlider: {fileID: 0}
-  m_initialattackGauge: 5
+  m_attackGaugeSlider: {fileID: 0}
+  m_initialAttackGauge: 10
 --- !u!50 &96012299828397776
 Rigidbody2D:
   serializedVersion: 4
@@ -128,7 +127,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.18463719, y: 1.3644384}
+  m_Offset: {x: 0, y: 1.2}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace TabTabs.NamChanwoo
 {
@@ -21,12 +22,12 @@ namespace TabTabs.NamChanwoo
 
         [Header("Spawn Setting")]
         [SerializeField] bool IsSpawnAlignmentRandom= false;
+        [SerializeField] private GameObject m_SpawnLocation;
         [SerializeField] List<GameObject> m_NodeList = new List<GameObject>();
+        [SerializeField] private List<GameObject> m_monsterPrefabList;
         
+        /*[SerializeField] private GameObject m_Enemy;*/
         
-        public List<GameObject> monsterPrefab;
-        
-        [SerializeField] public GameObject Enemy;
         
         private void Awake()
         {
@@ -44,20 +45,19 @@ namespace TabTabs.NamChanwoo
 
         private void Start()
         {
-            SpawnNode(Enemy);
-        }
-        
-        public void SpawnNode(GameObject enemy)
-        {
-            EnemyBase enemyBase = enemy.GetComponent<EnemyBase>();
-            
-            // enemyBase가 발견되었는지 확인하십시오.
-            if (enemyBase == null)
+            // SpawnLocation 자식 개체 찾기
+            m_SpawnLocation = transform.Find("SpawnLocation").gameObject;
+            if (m_SpawnLocation == null)
             {
-                Debug.LogError("적 또는 적의 자식에서 enemyBase를 찾을 수 없습니다.");
+                Debug.LogError("하위 개체로 SpawnLocation을 찾을 수 없습니다.");
                 return;
             }
-            
+
+            SpawnMonster();
+        }
+        
+        public void SpawnNode(EnemyBase enemyBase)
+        {
             //노드가 0개가 아니라면 생성 된 노드를 삭제하고 Queue를 비웁니다.
             if (enemyBase.GetOwnNodes().Count !=0)
             {
@@ -126,15 +126,16 @@ namespace TabTabs.NamChanwoo
         }
         
         
-        public void SpawnMonster(Vector3 position)
+        public void SpawnMonster()
         {
-            GameObject monsterGO = Instantiate(monsterPrefab, position, Quaternion.identity);
-            CharacterBase character = monsterGO.GetComponent<CharacterBase>();
-
-            if (character != null)
+            int randomIndex = UnityEngine.Random.Range(0, m_monsterPrefabList.Count);
+            GameObject monsterPrefab = m_monsterPrefabList[randomIndex];
+            GameObject spawnMonster = Instantiate(monsterPrefab, m_SpawnLocation.transform.position, Quaternion.identity);
+            EnemyBase spawnEnemy = spawnMonster.GetComponent<EnemyBase>();
+            if (spawnEnemy != null)
             {
-                // notify the system that a monster has been spawned
-                notificationSystem.SceenMonsterSpwaned.Invoke(character);
+                GameManager.NotificationSystem.SceneMonsterSpawned.Invoke(spawnEnemy); // 몬스터가 스폰되었음을 시스템에 알립니다.
+                SpawnNode(spawnEnemy);
             }
         }
 

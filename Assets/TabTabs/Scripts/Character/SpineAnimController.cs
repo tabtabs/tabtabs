@@ -11,93 +11,99 @@ public class SpineAnimController : MonoBehaviour
     [SerializeField] private CharacterBase m_model;
     [SerializeField] private SkeletonAnimation m_skeletonAnimation;
     
-    [SerializeField] private SpineAnimation m_spineAnimator;
-    
     ECharacterState m_currentState = ECharacterState.Idle;
-    ECharacterState m_previousViewState= ECharacterState.Idle;
+    ECharacterState m_previousState= ECharacterState.Idle;
     
-    public AnimationReferenceAsset m_runAnim, m_idleAnim, m_hitAnim, m_attackAnim;
-
+    [SerializeField] private AnimationReferenceAsset m_runAnim, m_idleAnim, m_hitAnim, m_attackAnim;
+    
     private void Awake()
     {
-        if (m_skeletonAnimation==null)
+        if (m_skeletonAnimation == null)
         {
             m_skeletonAnimation = GetComponent<SkeletonAnimation>();
         }
     }
 
-    void Start()
+    private void Start()
     {
-        m_model.ChangeState += SetState;
+        if (m_model == null)
+        {
+            Debug.LogError("CharacterBase 참조가 SpineAnimController에 설정되지 않았습니다!");
+            return;
+        }
+        m_model.ChangeState += PlayNewStableAnimation;
+
+        if (m_skeletonAnimation == null)
+        {
+            Debug.LogError("SpineAnimController에 SkeletonAnimation 구성 요소가 없습니다!");
+            return;
+        }
         m_skeletonAnimation.AnimationState.Complete += HandleAnimCompleteEvent;
     }
-
-    private void HandleAnimCompleteEvent(TrackEntry trackentry)
+    
+    private void OnDestroy()
     {
-        if (trackentry.Animation.Name == "atk")
+        if (m_model != null)
         {
-            m_model.currentState = ECharacterState.Idle;
+            m_model.ChangeState -= PlayNewStableAnimation;
         }
     }
 
-    private void OnDestroy() 
+    private void HandleAnimCompleteEvent(TrackEntry trackEntry)
     {
-        m_model.ChangeState -= SetState;
-    }
-
-
-    void AttackAnimEvent () 
-    {
-        Debug.Log("실행됨 어택이벤트가");
-        m_model.currentState = ECharacterState.Idle;
-    }
-
-    private void SetState(ECharacterState NewState)
-    {
-        m_currentState = NewState;
-    }
-
-    void Update()
-    {
-        if (m_skeletonAnimation == null) return; // SkeletonAnimation 구성 요소가 할당되었는지 확인
-        
-        if (m_model == null) return; // SpineboyBeginnerModel 구성 요소가 할당되었는지 확인
-        
-        if (m_previousViewState != m_currentState)
+        if (trackEntry.Animation.Name == "atk")
         {
-            PlayNewStableAnimation(); // 업데이트된 상태를 기반으로 적절한 새 안정적인 애니메이션을 재생합니다.
+            m_model.CurrentState = ECharacterState.Idle;
         }
-
-        // 다음 프레임 비교를 위해 이전 상태를 현재 상태로 업데이트
-        m_previousViewState = m_currentState;
     }
     
-    void PlayNewStableAnimation () 
+    void AttackAnimEvent () 
     {
-        ECharacterState newModelState = m_model.currentState;
-        
-        Debug.Log("오크 상태 : " +newModelState);
+        m_model.CurrentState = ECharacterState.Idle;
+    }
+    
+    void PlayNewStableAnimation (ECharacterState newState) 
+    {
+        if (m_currentState == newState) return;
+
+        m_previousState = m_currentState;
+        m_currentState = newState;
         
         Animation nextAnimation; // 다음에 재생할 애니메이션을 저장할 변수를 선언합니다.
         
-        if (newModelState == ECharacterState.Running)
+        switch (m_currentState)
         {
-            nextAnimation = m_runAnim;
-        }
-        else if (newModelState == ECharacterState.Attacking)
-        {
-            nextAnimation = m_attackAnim;
-        }
-        else if (newModelState == ECharacterState.Hit)
-        {
-            nextAnimation = m_hitAnim;
-        }
-        else  // idle 경우
-        {
-            nextAnimation = m_idleAnim;
+            case ECharacterState.Running:
+                nextAnimation = m_runAnim;
+                break;
+            case ECharacterState.Attacking:
+                nextAnimation = m_attackAnim;
+                break;
+            case ECharacterState.Hit:
+                nextAnimation = m_hitAnim;
+                break;
+            default:
+                nextAnimation = m_idleAnim;
+                break;
         }
         
-        // SkeletonAnimation의 트랙 0에서 nextAnimation을 계속 재생하도록 설정합니다.
         m_skeletonAnimation.AnimationState.SetAnimation(0, nextAnimation, true);
     }
 }
+
+/*void Update()
+{
+    if (m_skeletonAnimation == null) 
+        return; 
+    
+    if (m_model == null) 
+        return; 
+    
+    if (m_previousViewState != m_currentState)
+    {
+        PlayNewStableAnimation(); // 업데이트된 상태를 기반으로 적절한 새 안정적인 애니메이션을 재생합니다.
+    }
+
+    // 다음 프레임 비교를 위해 이전 상태를 현재 상태로 업데이트
+    m_previousViewState = m_currentState;
+}*/
