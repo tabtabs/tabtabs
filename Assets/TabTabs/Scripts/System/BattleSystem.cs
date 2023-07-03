@@ -17,31 +17,19 @@ namespace TabTabs.NamChanwoo
         // EnemyBase클래스의 m_nodeQueue변수(Queue 블록) => GetownNodes함수 가져다 씀
         //NodeSheet NodeSheetInstance;
         public EnemyBase selectEnemy;
-        
+        public CharacterBase CharacterBaseInstance;
         List<EnemyBase> SceneEnemyList = new List<EnemyBase>();
-
         public ENodeType ClickNode;
         public Button LeftButton;
         public Button UpButton;
         public Button RightButton;
+        public PlayerBase PlayerBaseInstance;
         
         void Start()
         {
             ClickNode = ENodeType.Default;
-            
-            /*if (LeftButton==null)
-            {
-                LeftButton = GetComponent<Button>();
-            }
-            if (UpButton==null)
-            {
-                UpButton = GetComponent<Button>();
-            }
-            if (RightButton==null)
-            {   
-                RightButton = GetComponent<Button>();
-            }*/
-
+            CharacterBaseInstance = FindObjectOfType<CharacterBase>();
+            PlayerBaseInstance = FindObjectOfType<PlayerBase>();
             LeftButton.onClick.AddListener(LeftB);
             UpButton.onClick.AddListener(UpB);
             RightButton.onClick.AddListener(RightB);
@@ -72,15 +60,19 @@ namespace TabTabs.NamChanwoo
                     // 1. 해당하는 enemy의 블럭 destroy
                     // 2. 캐릭터가 해당하는 enemy의 블럭위치로 이동 후 공격 애니메이션 재생 후 원래위치로 이동
                     // 3. 시간변수 +
+                    CharacterBaseInstance.gameObject.transform.position = new Vector3(selectEnemy.GetOwnNodes().Peek().gameObject.transform.position.x
+                    , selectEnemy.GetOwnNodes().Peek().gameObject.transform.position.y,0.0f);
+                    PlayerBaseInstance.PlayerAnim.SetTrigger("Atk1_Triger");
                     Destroy(selectEnemy.GetOwnNodes().Peek().gameObject);
                     selectEnemy.GetOwnNodes().Dequeue();
-                    // m_AttackGauge+
+                    selectEnemy.IncreaseAttackGauge(1.0f);
 
                     if (selectEnemy.GetOwnNodes().Count<=0)
                     {// 에너미의 노드가 0보다 작거나 같다면
                         // 몬스터 제거 후 다시생성
 
                         selectEnemy.CurrentState = ECharacterState.Die;
+                        
                         //ToDo : 현재 선택된 몬스터가 사망했으니 씬에 만약 다른 몬스터가 있다면 selectEnemy에 넣어줘야함
                     }
                 }

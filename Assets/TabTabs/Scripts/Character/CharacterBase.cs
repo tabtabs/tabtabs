@@ -21,7 +21,7 @@ namespace TabTabs.NamChanwoo
 
     public class CharacterBase : MonoBehaviour
     {
-        protected Rigidbody2D m_rigidbody;
+        public Rigidbody2D m_rigidbody;
         
         [Header("Movement Settings")]
         [SerializeField] protected float m_moveSpeed = 4.0f;
