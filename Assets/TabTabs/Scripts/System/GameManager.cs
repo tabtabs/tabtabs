@@ -31,6 +31,11 @@ namespace TabTabs.NamChanwoo
             InitializeSystems();
         }
 
+        private void Start()
+        {
+            /*Time.timeScale = 0.3f;*/
+        }
+
         private void OnEnable()
         {
             StartSystems();

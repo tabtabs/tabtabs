@@ -49,9 +49,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de46fa355805e234fb9848da20cec3fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_rigidbody: {fileID: 0}
   m_attackGaugeSlider: {fileID: 0}
   m_maxAttackGauge: 2
-  m_moveSpeed: 6
+  skullPrefab: {fileID: 776757522492366896, guid: 77831723e8349764295a527fa06bdc1d, type: 3}
+  m_moveSpeed: 10
 --- !u!114 &-1088732773587229446
 MonoBehaviour:
   m_ObjectHideFlags: 0

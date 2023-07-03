@@ -21,6 +21,8 @@ namespace TabTabs.NamChanwoo
         [FormerlySerializedAs("m_chargAttackGauge")] [SerializeField] private float m_maxAttackGauge = 10.0f; 
         private float m_attackGauge = 10.0f; // 공격 쿨다운
         
+        public GameObject skullPrefab;
+        
         public float AttackGauge
         {
             get => CurrentState == ECharacterState.Attacking ? 0.0f : m_attackGauge;
@@ -51,7 +53,7 @@ namespace TabTabs.NamChanwoo
 
         protected void Update()
         {
-            Debug.Log("EnemyBase Update : " + CurrentState);
+            /*Debug.Log("EnemyBase Update : " + CurrentState);*/
         }
 
         protected void FixedUpdate()
@@ -72,7 +74,12 @@ namespace TabTabs.NamChanwoo
             {
                 Vector2 newPosition = m_rigidbody.position + m_movementDirection * (m_moveSpeed * Time.fixedDeltaTime);
                 m_rigidbody.MovePosition(newPosition);
-                SetState(ECharacterState.Running);
+                
+                if (CurrentState == ECharacterState.Idle )
+                {
+                    SetState(ECharacterState.Running);
+                }
+                
             }
         }
         
@@ -120,16 +127,38 @@ namespace TabTabs.NamChanwoo
             AttackGauge += amount;
         }
         
+        public void HitIncreaseAttackGauge()
+        {
+            AttackGauge =AttackGauge + (m_maxAttackGauge * 0.1f);
+        }
+        
         public bool IsAttackGaugeEmpty()
         {
             return !(AttackGauge > 0.0f);
         }
 
+        public void Hit()
+        {
+            SetState(ECharacterState.Hit);
+            HitIncreaseAttackGauge();
+        }
+        
         public void Die()
         {
             SetState(ECharacterState.Die);
-            
+
+            BoxCollider2D orcCollider = GetComponent<BoxCollider2D>();
+            Vector3 skullPosition = transform.position;
+
+            if (orcCollider != null)
+            {
+                skullPosition += new Vector3(0, orcCollider.size.y / 2, 0);
+            }
+
+            GameObject skull = Instantiate(skullPrefab, skullPosition, Quaternion.identity);
+            Destroy(gameObject);
             GameManager.NotificationSystem.SceneMonsterDeath?.Invoke(this);
         }
+
     }
 }
