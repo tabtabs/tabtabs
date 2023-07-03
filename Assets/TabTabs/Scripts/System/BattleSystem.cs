@@ -65,12 +65,13 @@ namespace TabTabs.NamChanwoo
                     PlayerBaseInstance.PlayerAnim.SetTrigger("Atk1_Triger");
                     Destroy(selectEnemy.GetOwnNodes().Peek().gameObject);
                     selectEnemy.GetOwnNodes().Dequeue();
-                    selectEnemy.IncreaseAttackGauge(1.0f);
+                    selectEnemy.Hit();
 
+                    
                     if (selectEnemy.GetOwnNodes().Count<=0)
                     {// 에너미의 노드가 0보다 작거나 같다면
                         // 몬스터 제거 후 다시생성
-
+                        selectEnemy.Die();
 
                         //ToDo : 현재 선택된 몬스터가 사망했으니 씬에 만약 다른 몬스터가 있다면 selectEnemy에 넣어줘야함
                     }
@@ -93,17 +94,14 @@ namespace TabTabs.NamChanwoo
         void LeftB()
         {
             ClickNode = ENodeType.Left;
-            Debug.Log(ClickNode);
         }
         void UpB()
         {
             ClickNode = ENodeType.Up;
-            Debug.Log(ClickNode);
         }
         void RightB()
         {
             ClickNode = ENodeType.Right;
-            Debug.Log(ClickNode);
         }
     }
 }
