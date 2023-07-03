@@ -71,7 +71,7 @@ namespace TabTabs.NamChanwoo
                     {// 에너미의 노드가 0보다 작거나 같다면
                         // 몬스터 제거 후 다시생성
 
-                        selectEnemy.CurrentState = ECharacterState.Die;
+
                         
                         //ToDo : 현재 선택된 몬스터가 사망했으니 씬에 만약 다른 몬스터가 있다면 selectEnemy에 넣어줘야함
                     }
