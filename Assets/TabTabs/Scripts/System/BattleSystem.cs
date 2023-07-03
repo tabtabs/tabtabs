@@ -9,39 +9,27 @@ namespace TabTabs.NamChanwoo
 
     public class BattleSystem : GameSystem
     {
-        // BattleSystem¿¡¼­ ±¸ÇöµÉ °Íµé
-        // 1. ÀüÅõ·ÎÁ÷
-        // 2. Timebar¿Í ¿¡³Ê¹ÌÀÇ Ã¼·Â --
-        // NodeSheetÅ¬·¡½ºÀÇ m_NodeType;(¹æÇâÅ°) => º¯¼ö·Î °¡Á®´Ù ¾¸
-        // SpawnSystemÅ¬·¡½ºÀÇ SpawnNode(GameObject enemy)ÇÔ¼ö => ½ÌÅ¬Åæ
-        // EnemyBaseÅ¬·¡½ºÀÇ m_nodeQueueº¯¼ö(Queue ºí·Ï) => GetownNodesÇÔ¼ö °¡Á®´Ù ¾¸
+        // BattleSystemì—ì„œ êµ¬í˜„ë  ê²ƒë“¤
+        // 1. ì „íˆ¬ë¡œì§
+        // 2. Timebarì™€ ì—ë„ˆë¯¸ì˜ ì²´ë ¥ --
+        // NodeSheetí´ë˜ìŠ¤ì˜ m_NodeType;(ë°©í–¥í‚¤) => ë³€ìˆ˜ë¡œ ê°€ì ¸ë‹¤ ì”€
+        // SpawnSystemí´ë˜ìŠ¤ì˜ SpawnNode(GameObject enemy)í•¨ìˆ˜ => ì‹±í´í†¤
+        // EnemyBaseí´ë˜ìŠ¤ì˜ m_nodeQueueë³€ìˆ˜(Queue ë¸”ë¡) => GetownNodesí•¨ìˆ˜ ê°€ì ¸ë‹¤ ì”€
         //NodeSheet NodeSheetInstance;
         public EnemyBase selectEnemy;
-        
+        public CharacterBase CharacterBaseInstance;
         List<EnemyBase> SceneEnemyList = new List<EnemyBase>();
-
         public ENodeType ClickNode;
         public Button LeftButton;
         public Button UpButton;
         public Button RightButton;
+        public PlayerBase PlayerBaseInstance;
         
         void Start()
         {
             ClickNode = ENodeType.Default;
-            
-            /*if (LeftButton==null)
-            {
-                LeftButton = GetComponent<Button>();
-            }
-            if (UpButton==null)
-            {
-                UpButton = GetComponent<Button>();
-            }
-            if (RightButton==null)
-            {   
-                RightButton = GetComponent<Button>();
-            }*/
-
+            CharacterBaseInstance = FindObjectOfType<CharacterBase>();
+            PlayerBaseInstance = FindObjectOfType<PlayerBase>();
             LeftButton.onClick.AddListener(LeftB);
             UpButton.onClick.AddListener(UpB);
             RightButton.onClick.AddListener(RightB);
@@ -65,32 +53,35 @@ namespace TabTabs.NamChanwoo
         void Update()
         {
             if (ClickNode!=ENodeType.Default)
-            {// ClickNode°¡ Áß¸³ÀÌ ¾Æ´Ï¶ó¸é(¹öÆ°À» Å¬¸¯Çß´Ù¸é)
+            {// ClickNodeê°€ ì¤‘ë¦½ì´ ì•„ë‹ˆë¼ë©´(ë²„íŠ¼ì„ í´ë¦­í–ˆë‹¤ë©´)
                 if (ClickNode==selectEnemy.GetOwnNodes().Peek().nodeSheet.m_NodeType)
-                {//´ÙÀ½¿¡ ³ª°¥ ³ëµåÅ¸ÀÔ°ú ºñ±³(°°Àº NodeTypeÀ» Å¬¸¯Çß´Ù¸é)
+                {//ë‹¤ìŒì— ë‚˜ê°ˆ ë…¸ë“œíƒ€ì…ê³¼ ë¹„êµ(ê°™ì€ NodeTypeì„ í´ë¦­í–ˆë‹¤ë©´)
 
-                    // 1. ÇØ´çÇÏ´Â enemyÀÇ ºí·° destroy
-                    // 2. Ä³¸¯ÅÍ°¡ ÇØ´çÇÏ´Â enemyÀÇ ºí·°À§Ä¡·Î ÀÌµ¿ ÈÄ °ø°İ ¾Ö´Ï¸ŞÀÌ¼Ç Àç»ı ÈÄ ¿ø·¡À§Ä¡·Î ÀÌµ¿
-                    // 3. ½Ã°£º¯¼ö +
+                    // 1. í•´ë‹¹í•˜ëŠ” enemyì˜ ë¸”ëŸ­ destroy
+                    // 2. ìºë¦­í„°ê°€ í•´ë‹¹í•˜ëŠ” enemyì˜ ë¸”ëŸ­ìœ„ì¹˜ë¡œ ì´ë™ í›„ ê³µê²© ì• ë‹ˆë©”ì´ì…˜ ì¬ìƒ í›„ ì›ë˜ìœ„ì¹˜ë¡œ ì´ë™
+                    // 3. ì‹œê°„ë³€ìˆ˜ +
+                    CharacterBaseInstance.gameObject.transform.position = new Vector3(selectEnemy.GetOwnNodes().Peek().gameObject.transform.position.x
+                    , selectEnemy.GetOwnNodes().Peek().gameObject.transform.position.y,0.0f);
+                    PlayerBaseInstance.PlayerAnim.SetTrigger("Atk1_Triger");
                     Destroy(selectEnemy.GetOwnNodes().Peek().gameObject);
                     selectEnemy.GetOwnNodes().Dequeue();
-                    // m_AttackGauge+
+                    selectEnemy.IncreaseAttackGauge(1.0f);
 
                     if (selectEnemy.GetOwnNodes().Count<=0)
-                    {// ¿¡³Ê¹ÌÀÇ ³ëµå°¡ 0º¸´Ù ÀÛ°Å³ª °°´Ù¸é
-                        // ¸ó½ºÅÍ Á¦°Å ÈÄ ´Ù½Ã»ı¼º
+                    {// ì—ë„ˆë¯¸ì˜ ë…¸ë“œê°€ 0ë³´ë‹¤ ì‘ê±°ë‚˜ ê°™ë‹¤ë©´
+                        // ëª¬ìŠ¤í„° ì œê±° í›„ ë‹¤ì‹œìƒì„±
 
-                        selectEnemy.Die();
-                        //ToDo : ÇöÀç ¼±ÅÃµÈ ¸ó½ºÅÍ°¡ »ç¸ÁÇßÀ¸´Ï ¾À¿¡ ¸¸¾à ´Ù¸¥ ¸ó½ºÅÍ°¡ ÀÖ´Ù¸é selectEnemy¿¡ ³Ö¾îÁà¾ßÇÔ
+
+                        //ToDo : í˜„ì¬ ì„ íƒëœ ëª¬ìŠ¤í„°ê°€ ì‚¬ë§í–ˆìœ¼ë‹ˆ ì”¬ì— ë§Œì•½ ë‹¤ë¥¸ ëª¬ìŠ¤í„°ê°€ ìˆë‹¤ë©´ selectEnemyì— ë„£ì–´ì¤˜ì•¼í•¨
                     }
                 }
                 else
                 {
-                    // ¾Æ´Ï¶ó¸é
-                    // 1. Ä³¸¯ÅÍ Hp --
-                    // 2. Ä³¸¯ÅÍ ¿ø·¡À§Ä¡·Î ÀÌµ¿
-                    // 3. EnemyÀÇ Ä³¸¯ÅÍ °ø°İ ¾Ö´Ï¸ŞÀÌ¼Ç Àç»ı
-                    // 4. ³ëµå ´Ù½Ã »ı¼ºÇÏ´Â ÇÔ¼ö È£Ãâ
+                    // ì•„ë‹ˆë¼ë©´
+                    // 1. ìºë¦­í„° Hp --
+                    // 2. ìºë¦­í„° ì›ë˜ìœ„ì¹˜ë¡œ ì´ë™
+                    // 3. Enemyì˜ ìºë¦­í„° ê³µê²© ì• ë‹ˆë©”ì´ì…˜ ì¬ìƒ
+                    // 4. ë…¸ë“œ ë‹¤ì‹œ ìƒì„±í•˜ëŠ” í•¨ìˆ˜ í˜¸ì¶œ
                     SpawnSystem.Instance.SpawnNode(selectEnemy);
                 }
 

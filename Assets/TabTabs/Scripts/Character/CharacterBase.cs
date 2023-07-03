@@ -21,7 +21,7 @@ namespace TabTabs.NamChanwoo
 
     public class CharacterBase : MonoBehaviour
     {
-        protected Rigidbody2D m_rigidbody;
+        public Rigidbody2D m_rigidbody;
         
         protected Vector2 m_movementDirection;
 
