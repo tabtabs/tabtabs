@@ -22,6 +22,7 @@ public class PlayerBase : CharacterBase
 
     public void PlayerAnimEvent()
     {
-        gameObject.transform.position = new Vector3(-4.19f, 0);
+        Vector3 targetPosition = new Vector3(-1.2f, 1.5f, 0f);
+        transform.position = targetPosition;
     }
 }
