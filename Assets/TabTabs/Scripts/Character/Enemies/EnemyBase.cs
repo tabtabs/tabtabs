@@ -76,12 +76,16 @@ namespace TabTabs.NamChanwoo
             {
                 Vector2 newPosition = m_rigidbody.position + m_movementDirection * (m_moveSpeed * Time.fixedDeltaTime);
                 m_rigidbody.MovePosition(newPosition);
-                
-                if (CurrentState == ECharacterState.Idle )
-                {
-                    SetState(ECharacterState.Running);
-                }
-                
+                //Vector3 currentPosition = m_rigidbody.position;
+                //float newY = 1.1f;
+                //Vector3 newPosition = new Vector3(Vector2.zero.x, newY, currentPosition.z);
+                //m_rigidbody.MovePosition(newPosition);
+
+                //if (CurrentState == ECharacterState.Idle )
+                //{
+                //    SetState(ECharacterState.Running);
+                //}
+
             }
         }
         

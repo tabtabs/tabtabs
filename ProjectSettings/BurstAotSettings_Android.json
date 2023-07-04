@@ -11,7 +11,9 @@
     "CpuMaxTargetX32": 0,
     "CpuMinTargetX64": 0,
     "CpuMaxTargetX64": 0,
-    "CpuTargetsArm64": -6145,
+
+    "CpuTargetsArm64": 512,
+
     "OptimizeFor": 0
   }
 }

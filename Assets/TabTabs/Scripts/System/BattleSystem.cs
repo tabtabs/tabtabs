@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using UnityEngine.Animations;
 
 namespace TabTabs.NamChanwoo
 {
@@ -24,12 +25,15 @@ namespace TabTabs.NamChanwoo
         public Button UpButton;
         public Button RightButton;
         public PlayerBase PlayerBaseInstance;
+        public Player_Effect Player_EffectInstance;
+        public GameObject Player_Effect;
         
         void Start()
         {
             ClickNode = ENodeType.Default;
             CharacterBaseInstance = FindObjectOfType<CharacterBase>();
             PlayerBaseInstance = FindObjectOfType<PlayerBase>();
+            Player_EffectInstance = FindObjectOfType<Player_Effect>();
             LeftButton.onClick.AddListener(LeftB);
             UpButton.onClick.AddListener(UpB);
             RightButton.onClick.AddListener(RightB);
@@ -66,11 +70,13 @@ namespace TabTabs.NamChanwoo
                     // 2. 캐릭터가 해당하는 enemy의 블럭위치로 이동 후 공격 애니메이션 재생 후 원래위치로 이동
                     // 3. 시간변수 +
 
-                    Node selectNode = selectEnemy.GetOwnNodes().Peek();
-                    CharacterBaseInstance.gameObject.transform.position = new Vector3(selectNode.gameObject.transform.position.x, selectNode.gameObject.transform.position.y, 0.0f);
-                    
-                    PlayerBaseInstance.PlayerAnim.SetTrigger("Atk1_Triger");
-                    Destroy(selectNode.gameObject);
+                    CharacterBaseInstance.gameObject.transform.position = new Vector3(selectEnemy.GetOwnNodes().Peek().gameObject.transform.position.x
+                    , selectEnemy.GetOwnNodes().Peek().gameObject.transform.position.y,0.0f);
+                    PlayerBaseInstance.PlayerAnim.SetTrigger("Atk1_Triger"); // 오크의 위치로 이동해 공격모션
+                    Vector3 targetPosition = selectEnemy.GetOwnNodes().Peek().gameObject.transform.position;
+                    Instantiate(Player_Effect, targetPosition, Quaternion.identity);
+                    Destroy(selectEnemy.GetOwnNodes().Peek().gameObject);
+
                     selectEnemy.GetOwnNodes().Dequeue();
                     selectEnemy.Hit();
 
