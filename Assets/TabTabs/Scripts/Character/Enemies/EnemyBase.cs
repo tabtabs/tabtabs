@@ -22,6 +22,8 @@ namespace TabTabs.NamChanwoo
         private float m_attackGauge = 10.0f; // 공격 쿨다운
         
         public GameObject skullPrefab;
+
+        private int attackDamage = 3;
         
         public float AttackGauge
         {
@@ -113,6 +115,7 @@ namespace TabTabs.NamChanwoo
             {
                 SetState(ECharacterState.Attacking);
                 AttackGauge = m_maxAttackGauge;
+                GameManager.UISystem.CalculateDamage(attackDamage);
             }
         }
 

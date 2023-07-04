@@ -58,32 +58,52 @@ namespace TabTabs.NamChanwoo
         {
             if (ClickNode!=ENodeType.Default)
             {// ClickNode가 중립이 아니라면(버튼을 클릭했다면)
+                
+                if (selectEnemy==null) { return; }
+                
                 if (ClickNode==selectEnemy.GetOwnNodes().Peek().nodeSheet.m_NodeType)
                 {//다음에 나갈 노드타입과 비교(같은 NodeType을 클릭했다면)
 
+                    GameManager.NotificationSystem.NodeHitSuccess?.Invoke();
+                    
                     // 1. 해당하는 enemy의 블럭 destroy
                     // 2. 캐릭터가 해당하는 enemy의 블럭위치로 이동 후 공격 애니메이션 재생 후 원래위치로 이동
                     // 3. 시간변수 +
+
                     CharacterBaseInstance.gameObject.transform.position = new Vector3(selectEnemy.GetOwnNodes().Peek().gameObject.transform.position.x
                     , selectEnemy.GetOwnNodes().Peek().gameObject.transform.position.y,0.0f);
                     PlayerBaseInstance.PlayerAnim.SetTrigger("Atk1_Triger"); // 오크의 위치로 이동해 공격모션
                     Vector3 targetPosition = selectEnemy.GetOwnNodes().Peek().gameObject.transform.position;
                     Instantiate(Player_Effect, targetPosition, Quaternion.identity);
                     Destroy(selectEnemy.GetOwnNodes().Peek().gameObject);
+
                     selectEnemy.GetOwnNodes().Dequeue();
                     selectEnemy.Hit();
 
                     
                     if (selectEnemy.GetOwnNodes().Count<=0)
-                    {// 에너미의 노드가 0보다 작거나 같다면
+                    {
+                        // 에너미의 노드가 0보다 작거나 같다면
                         // 몬스터 제거 후 다시생성
                         selectEnemy.Die();
 
-                        //ToDo : 현재 선택된 몬스터가 사망했으니 씬에 만약 다른 몬스터가 있다면 selectEnemy에 넣어줘야함
+
+                        if (SceneEnemyList.Count > 0)
+                        {
+                            selectEnemy = SceneEnemyList[0];
+                            selectEnemy.SetupAttackSliderUI(GameManager.UISystem.AttackSliderUI);
+                        }
                     }
                 }
                 else
                 {
+                    GameManager.NotificationSystem.NodeHitFail?.Invoke();
+                    
+                    if (selectEnemy!=null)
+                    {
+                        selectEnemy.Attack();
+                    }
+                    
                     // 아니라면
                     // 1. 캐릭터 Hp --
                     // 2. 캐릭터 원래위치로 이동
@@ -109,5 +129,7 @@ namespace TabTabs.NamChanwoo
         {
             ClickNode = ENodeType.Right;
         }
+        
+
     }
 }
