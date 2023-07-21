@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TabTabs.NamChanwoo;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace TabTabs.NamChanwoo
 {
@@ -20,8 +22,9 @@ namespace TabTabs.NamChanwoo
         public static NotificationSystem NotificationSystem => GetSystem<NotificationSystem>();
         public static UISystem UISystem => GetSystem<UISystem>();
         public static BattleSystem BattleSystem => GetSystem<BattleSystem>();
-        
-        
+
+        public Button Test1Button;
+        public Button Test2Button;
 
         private void Awake()
         {
@@ -33,7 +36,8 @@ namespace TabTabs.NamChanwoo
 
         private void Start()
         {
-            /*Time.timeScale = 0.3f;*/
+            Test1Button.onClick.AddListener(Test1);
+            Test2Button.onClick.AddListener(Test2);
         }
 
         private void OnEnable()
@@ -84,13 +88,21 @@ namespace TabTabs.NamChanwoo
             }
         }
 
-
         public static T GetSystem<T>() where T : GameSystem
         {
             GameSystem system = null;
             bool systemFound = _instance.m_systems.TryGetValue(typeof(T), out system);
             Debug.Assert(systemFound, $"게임 시스템 {typeof(T).Name}을(를) 찾을 수 없습니다.");
             return (T)system;
+        }
+
+        public void Test1()
+        {
+            SceneManager.LoadScene(2);
+        }
+        public void Test2()
+        {
+            SceneManager.LoadScene(1);
         }
     }
 

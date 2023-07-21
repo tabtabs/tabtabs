@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 
 namespace TabTabs.NamChanwoo
@@ -15,15 +16,14 @@ namespace TabTabs.NamChanwoo
         public NodeArea nodeArea => m_nodeArea;
 
         private Queue<Node> m_nodeQueue = new Queue<Node>();
-       
+
+        public Test2BattleSystem BattleInstance;
         [Header("Attack Properties")]
         public Slider m_attackGaugeSlider;
         [FormerlySerializedAs("m_chargAttackGauge")] [SerializeField] private float m_maxAttackGauge = 10.0f; 
         private float m_attackGauge = 10.0f; // 공격 쿨다운
         
         public GameObject skullPrefab;
-
-        private int attackDamage = 3;
         
         public float AttackGauge
         {
@@ -50,7 +50,7 @@ namespace TabTabs.NamChanwoo
             {
                 m_rigidbody = GetComponent<Rigidbody2D>();
             }
-            
+            BattleInstance = FindObjectOfType<Test2BattleSystem>();
         }
 
         protected void Update()
@@ -76,15 +76,6 @@ namespace TabTabs.NamChanwoo
             {
                 Vector2 newPosition = m_rigidbody.position + m_movementDirection * (m_moveSpeed * Time.fixedDeltaTime);
                 m_rigidbody.MovePosition(newPosition);
-                //Vector3 currentPosition = m_rigidbody.position;
-                //float newY = 1.1f;
-                //Vector3 newPosition = new Vector3(Vector2.zero.x, newY, currentPosition.z);
-                //m_rigidbody.MovePosition(newPosition);
-
-                //if (CurrentState == ECharacterState.Idle )
-                //{
-                //    SetState(ECharacterState.Running);
-                //}
 
             }
         }
@@ -115,7 +106,6 @@ namespace TabTabs.NamChanwoo
             {
                 SetState(ECharacterState.Attacking);
                 AttackGauge = m_maxAttackGauge;
-                GameManager.UISystem.CalculateDamage(attackDamage);
             }
         }
 
@@ -163,7 +153,17 @@ namespace TabTabs.NamChanwoo
             }
 
             GameObject skull = Instantiate(skullPrefab, skullPosition, Quaternion.identity);
+            if (SceneManager.GetActiveScene().buildIndex == 1)
+            {
+                if (BattleInstance.selectEnemy == BattleInstance.RightEnemy)
+                {
+                    BattleInstance.MonsterDie = true;
+                }
+            }
+
             Destroy(gameObject);
+
+            
             GameManager.NotificationSystem.SceneMonsterDeath?.Invoke(this);
         }
 
