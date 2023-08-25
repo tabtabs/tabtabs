@@ -23,8 +23,6 @@ namespace TabTabs.NamChanwoo
         public static UISystem UISystem => GetSystem<UISystem>();
         public static BattleSystem BattleSystem => GetSystem<BattleSystem>();
 
-        public Button Test1Button;
-        public Button Test2Button;
 
         private void Awake()
         {
@@ -34,11 +32,6 @@ namespace TabTabs.NamChanwoo
             InitializeSystems();
         }
 
-        private void Start()
-        {
-            Test1Button.onClick.AddListener(Test1);
-            Test2Button.onClick.AddListener(Test2);
-        }
 
         private void OnEnable()
         {
@@ -96,14 +89,7 @@ namespace TabTabs.NamChanwoo
             return (T)system;
         }
 
-        public void Test1()
-        {
-            SceneManager.LoadScene(2);
-        }
-        public void Test2()
-        {
-            SceneManager.LoadScene(1);
-        }
+
     }
 
 }

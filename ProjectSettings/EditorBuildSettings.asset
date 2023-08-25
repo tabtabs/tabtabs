@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/TabTabs/Scenes/Test1Battle.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/TabTabs/Scenes/Test3Battle.unity
+    guid: 7c5bb99478a0653479908f0fe8fa450e
   m_configObjects: {}

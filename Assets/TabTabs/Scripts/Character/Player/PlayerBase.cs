@@ -24,7 +24,7 @@ public class PlayerBase : CharacterBase
 
     public void PlayerAnimEvent()
     {
-        if (SceneManager.GetActiveScene().buildIndex==1)
+        if (SceneManager.GetActiveScene().buildIndex==1||SceneManager.GetActiveScene().buildIndex==3)
         {// 첫번째 씬이라면
             Vector3 targetPosition = new Vector3(0.0f, 1.5f, 0f);
             transform.position = targetPosition;

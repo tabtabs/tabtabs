@@ -132,7 +132,7 @@ namespace TabTabs.NamChanwoo
                     return m_NodeList.Find(x => x.GetComponent<Node>().nodeSheet.m_NodeType == ENodeType.Up);
                 if(Column == 2) 
                     return m_NodeList.Find(x => x.GetComponent<Node>().nodeSheet.m_NodeType == ENodeType.Right);
-                
+             
                 return null;
             }
             

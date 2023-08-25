@@ -13,6 +13,7 @@ namespace TabTabs.NamChanwoo
         Up,
         Left,
         Right,
+        Attack,
         Default
     }
     

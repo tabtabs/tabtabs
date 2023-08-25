@@ -16,8 +16,8 @@ namespace TabTabs.NamChanwoo
         public NodeArea nodeArea => m_nodeArea;
 
         private Queue<Node> m_nodeQueue = new Queue<Node>();
-
-        public Test2BattleSystem BattleInstance;
+        public Test2BattleSystem BattleInstance2;
+        public Test3Battle BattleInstance3;
         [Header("Attack Properties")]
         public Slider m_attackGaugeSlider;
         [FormerlySerializedAs("m_chargAttackGauge")] [SerializeField] private float m_maxAttackGauge = 10.0f; 
@@ -50,7 +50,8 @@ namespace TabTabs.NamChanwoo
             {
                 m_rigidbody = GetComponent<Rigidbody2D>();
             }
-            BattleInstance = FindObjectOfType<Test2BattleSystem>();
+            BattleInstance3 = FindObjectOfType<Test3Battle>();
+            BattleInstance2= FindObjectOfType<Test2BattleSystem>();
         }
 
         protected void Update()
@@ -155,9 +156,16 @@ namespace TabTabs.NamChanwoo
             GameObject skull = Instantiate(skullPrefab, skullPosition, Quaternion.identity);
             if (SceneManager.GetActiveScene().buildIndex == 1)
             {
-                if (BattleInstance.selectEnemy == BattleInstance.RightEnemy)
+                if (BattleInstance2.selectEnemy == BattleInstance2.RightEnemy)
                 {
-                    BattleInstance.MonsterDie = true;
+                    BattleInstance2.MonsterDie = true;
+                }
+            }
+            else if (SceneManager.GetActiveScene().buildIndex == 3)
+            {
+                if (BattleInstance3.selectEnemy == BattleInstance3.RightEnemy)
+                {
+                    BattleInstance3.MonsterDie = true;
                 }
             }
 
