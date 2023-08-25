@@ -14,9 +14,8 @@ namespace TabTabs.NamChanwoo
         
         //이 노트가 현재 히트 할 수 있는 가?
         private bool m_isHitable = false;
-        
-        public virtual void Init(){}
-        
+        public virtual void Init_Right(){}
+        public virtual void Init_Left() {}
 
     }
 }

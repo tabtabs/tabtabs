@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 
 namespace TabTabs.NamChanwoo
 {
-    
+
     public enum EAlignment
     {
         Left,
@@ -24,8 +24,8 @@ namespace TabTabs.NamChanwoo
         [Header("Spawn Setting")]
         [SerializeField] bool IsSpawnAlignmentRandom= false;
         [SerializeField] private GameObject m_SpawnLocation;
-        [SerializeField] List<GameObject> m_NodeList = new List<GameObject>();
-        [SerializeField] private List<GameObject> m_monsterPrefabList;
+        [SerializeField] List<GameObject> m_NodeList = new List<GameObject>(); // 몬스터에 부착될 노드리스트
+        [SerializeField] private List<GameObject> m_monsterPrefabList; // 생성될 몬스터 리스트
         
         /*[SerializeField] private GameObject m_Enemy;*/
         
@@ -61,7 +61,7 @@ namespace TabTabs.NamChanwoo
 
         private void HandleSceneMonsterDeath(EnemyBase arg0)
         {
-            float delayTime = Random.Range(1.0f, 3.0f);
+            float delayTime = 1.0f;
             StartCoroutine(DelaySpawn(delayTime));
         }
 
@@ -114,7 +114,7 @@ namespace TabTabs.NamChanwoo
 
                 // NodeSheet로 노드를 초기화합니다.
                 Node nodeComponent = spawnedNode.GetComponent<Node>();
-                nodeComponent.Init();
+                nodeComponent.Init_Right();
                 
                 //에너미가 소유하는 노드에 추가합니다.
                 enemyBase.AddNodes(nodeComponent);
@@ -132,7 +132,7 @@ namespace TabTabs.NamChanwoo
                     return m_NodeList.Find(x => x.GetComponent<Node>().nodeSheet.m_NodeType == ENodeType.Up);
                 if(Column == 2) 
                     return m_NodeList.Find(x => x.GetComponent<Node>().nodeSheet.m_NodeType == ENodeType.Right);
-                
+             
                 return null;
             }
             
@@ -143,8 +143,8 @@ namespace TabTabs.NamChanwoo
         
         public void SpawnMonster()
         {
-            int randomIndex = UnityEngine.Random.Range(0, m_monsterPrefabList.Count);
-            GameObject monsterPrefab = m_monsterPrefabList[randomIndex];
+            //int randomIndex = UnityEngine.Random.Range(0, m_monsterPrefabList.Count);
+            GameObject monsterPrefab = m_monsterPrefabList[0];
             GameObject spawnMonster = Instantiate(monsterPrefab, m_SpawnLocation.transform.position, Quaternion.identity);
             EnemyBase spawnEnemy = spawnMonster.GetComponent<EnemyBase>();
             if (spawnEnemy != null)

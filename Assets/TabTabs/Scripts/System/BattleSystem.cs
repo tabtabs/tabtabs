@@ -79,15 +79,12 @@ namespace TabTabs.NamChanwoo
 
                     selectEnemy.GetOwnNodes().Dequeue();
                     selectEnemy.Hit();
-
                     
                     if (selectEnemy.GetOwnNodes().Count<=0)
                     {
-                        // 에너미의 노드가 0보다 작거나 같다면
+                        // 에너미 노드의 남아있는 갯수가 0보다 작거나 같다면
                         // 몬스터 제거 후 다시생성
                         selectEnemy.Die();
-
-
                         if (SceneEnemyList.Count > 0)
                         {
                             selectEnemy = SceneEnemyList[0];
